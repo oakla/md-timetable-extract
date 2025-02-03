@@ -29,11 +29,14 @@ subjects = [
     'Biochemistry',
     'Haematology',
     'Health Humanities'
+    'Research Skills',
+    'Aboriginal Health'
 ]
 
 type_indicators = {
     "SGL": ["SGL", "Small Group Learning"],
     "Lab": ["Lab group"],
+    "Assessment": ["Assessment"],
 }
 
 
