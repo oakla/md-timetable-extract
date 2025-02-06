@@ -1,7 +1,6 @@
 import pandas as pd
 import octk
 
-input_file = r'E:\alexa\OneDrive\130-Reference\UWA\MD1\Self-management\2025_AO_Scraped_timetable.csv'
 
 location_indicators = {
     "Pathology Museum": ['Path Museum', 'Pathology Museum', 'PathMuseum'],
@@ -38,6 +37,7 @@ presenter_indicators = {
     'Angus Cook': ["Angus Cook", '(AC)'],
     'Zaza Lyons': ["Zaza Lyons", '(ZL)'],
     'Tina Carter': ["Tina Carter", '(TC)'],
+    'Jo Chua': ["Jo Chua", '(JC)'],
 }
 
 location_to_type_map = {
@@ -45,19 +45,6 @@ location_to_type_map = {
     "Med Lib e-learning": "Workshop",
     "Pathology Museum": "SGL",
 }
-
-# read csv file
-df = pd.read_csv(input_file, header=0)
-
-def remove_extra_whitespace_inside_string(df):
-    for column in df.columns:
-        if df[column].dtype == 'object':
-            df[column] = df[column].str.strip()
-            df[column] = df[column].str.replace(r"\\n+", "", regex=True)
-            df[column] = df[column].str.replace(r"\s+", " ", regex=True)
-    return df
-
-
 
 def translate_from_indicator(indicator_map, content):
     for key, indicators in indicator_map.items():
@@ -68,9 +55,7 @@ def translate_from_indicator(indicator_map, content):
 
 
 def remove_duplicates(df):
-    df = df.drop_duplicates()
-    return df
-
+    return df.drop_duplicates()
 
 def add_missing_location(df):
     # for missing 'location' values, search in 'event' column
@@ -80,6 +65,7 @@ def add_missing_location(df):
             if location:
                 print(row['event'], location)
                 df.at[index, 'location'] = location
+    return df
 
 
 def add_missing_subject(df): 
@@ -89,6 +75,7 @@ def add_missing_subject(df):
             subject = translate_from_indicator(subject_indicators, row['event'])
             if subject:
                 df.at[index, 'subject'] = subject
+    return df
 
 
 def add_missing_type(df):
@@ -105,6 +92,7 @@ def add_missing_type(df):
                     if location.lower() == location_key.lower():
                         df.at[index, 'session_type'] = type_value
                         print("type set for: ", location, type_value)
+    return df
 
 
 def add_missing_presenter(df):
@@ -114,16 +102,17 @@ def add_missing_presenter(df):
             presenter = translate_from_indicator(presenter_indicators, row['event'])
             if presenter:
                 df.at[index, 'presenter'] = presenter
+    return df
 
-remove_duplicates(df)
-add_missing_location(df)
-add_missing_subject(df)
-add_missing_type(df)
-# create a new column 'presenter' and fill it with missing values
-df['presenter'] = ""
-add_missing_presenter(df)
 
-df.to_csv(octk.uniquify(input_file), index=False)
+def post_process_events(df):
+    df = remove_duplicates(df)
+    df = add_missing_location(df)
+    df = add_missing_subject(df)
+    df = add_missing_type(df)
+    df['presenter'] = ""
+    df = add_missing_presenter(df)
+    return df
 
 
 

@@ -1,3 +1,5 @@
+# Convert the weekly calendar layout into a list of events
+
 import pandas as pd
 import re
 from datetime import datetime
@@ -15,22 +17,21 @@ valid_days = [
 lecture_theatres = ["FJC", "Ross"]
 
 subjects = [
+    'Aboriginal Healt'
+    'Aboriginal Health'
+    "Anatomy",
     "Behavioural Science",
-    "Pathology",
+    'Biochemistry',
     "Clinical",
+    'Clinical Skills',
+    "Pathology",
     "Physiology",
     "Research skills",
-    "Anatomy",
-    'Aboriginal Healt'
+    'Pop Health',
     'Popn health',
     'Population Health',
-    'Pop Health',
-    'Clinical Skills',
-    'Biochemistry',
     'Haematology',
     'Health Humanities'
-    'Research Skills',
-    'Aboriginal Health'
 ]
 
 type_indicators = {
@@ -62,19 +63,19 @@ def colname_to_date(date, month_format="%B") -> datetime:
         return colname_to_date(date, month_format="%b")
 
 
-def is_online(event, start_time):
-    if re.search(r"online", start_time, flags=re.IGNORECASE):
+def is_online_time_slot(event, time_slot):
+    if re.search(r"online", time_slot, flags=re.IGNORECASE):
         return True
     return False
 
 
-def process_event(event, week_df, date_col_name, week_number):
-    event = event.strip()
+def process_event(event_name:str, week_df, date_col_name, week_number):
+    event_name = event_name.strip()
 
-    if event == "":
+    if event_name == "":
         return None
-    start_time = week_df[week_df[date_col_name] == event]["Time"].iloc[0]
-    end_time = week_df[week_df[date_col_name] == event]["Time"].iloc[-1]
+    start_time = week_df[week_df[date_col_name] == event_name]["Time"].iloc[0]
+    end_time = week_df[week_df[date_col_name] == event_name]["Time"].iloc[-1]
 
     # if date_col_name has (\d*) at the end, remove it
     date_col_name = re.sub(r"\(\d*\)$", "", date_col_name).strip()
@@ -83,33 +84,36 @@ def process_event(event, week_df, date_col_name, week_number):
     session_type = ""
     location = ""
     subject = ""
-    if is_online(event, start_time=start_time):
+    if is_online_time_slot(event_name, time_slot=start_time):
         location = "Online"
         session_type = "Lecture"
         start_time = ""
         end_time = ""
     elif re.search(r"\d{2}:\d{2}", start_time):
-        end_time = add_30_minutes(end_time)
+        if is_online_time_slot(event_name, time_slot=end_time):
+            end_time = "19:00"
+        else:
+            end_time = add_30_minutes(end_time)
 
     if not session_type:
         for lt in lecture_theatres:
-            if lt in event:
+            if lt in event_name:
                 location = lt
                 session_type = "Lecture"
 
         for key, values in type_indicators.items():
             for value in values:
-                if value in event:
+                if value in event_name:
                     session_type = key
                     break
 
     for subject_i in subjects:
-        if event.startswith(subject_i):
+        if event_name.startswith(subject_i):
             subject = subject_i
             break
 
     if not subject:
-        candidate_subject = event.split(':')[0]
+        candidate_subject = event_name.split(':')[0]
         if len(candidate_subject.split()) < 4:
             subject = candidate_subject
 
@@ -117,7 +121,7 @@ def process_event(event, week_df, date_col_name, week_number):
         "week": week_number,
         "day": date_obj.strftime("%A"),
         "date": date_obj.strftime("%Y-%m-%d"),
-        "event": event,
+        "event": event_name,
         "start_time": start_time,
         "end_time": end_time,
         "location": location,
