@@ -6,7 +6,7 @@ import process_timetable
 import etl
 import post_processing
 
-input_file = r"content\input_pdfs\2025 Timetable _Student_Version.V1.a.pdf"
+input_file = r"content\input_pdfs\2025 Timetable _V2.pdf"
 calendar_views: list[structs.CalendarWeekView] = etl.get_weekly_calendar_views(input_file)
 
 all_events = []
@@ -17,5 +17,5 @@ for calendar_view in calendar_views:
 df = pd.DataFrame(all_events)
 df = post_processing.post_process_events(df)
 
-output_file = octk.uniquify(r"content\output\2025_timetable.csv")
+output_file = octk.uniquify(r"content\output\scraped\2025_timetable.csv")
 df.to_csv(output_file, index=False)

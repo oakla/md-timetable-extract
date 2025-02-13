@@ -17,8 +17,8 @@ valid_days = [
 lecture_theatres = ["FJC", "Ross"]
 
 subjects = [
-    'Aboriginal Healt'
-    'Aboriginal Health'
+    'Aboriginal Healt',
+    'Aboriginal Health',
     "Anatomy",
     "Behavioural Science",
     'Biochemistry',
@@ -26,6 +26,7 @@ subjects = [
     'Clinical Skills',
     "Pathology",
     "Physiology",
+    "Pharmacology",
     "Research skills",
     'Pop Health',
     'Popn health',
@@ -33,12 +34,6 @@ subjects = [
     'Haematology',
     'Health Humanities'
 ]
-
-type_indicators = {
-    "SGL": ["SGL", "Small Group Learning"],
-    "Lab": ["Lab group"],
-    "Assessment": ["Assessment"],
-}
 
 
 def add_30_minutes(time):
@@ -69,13 +64,14 @@ def is_online_time_slot(event, time_slot):
     return False
 
 
-def process_event(event_name:str, week_df, date_col_name, week_number):
-    event_name = event_name.strip()
+def process_event(event_description:str, week_df, date_col_name, week_number):
+    event_identifier = event_description
+    event_description = re.sub(r'\s+',' ', event_description).strip()
 
-    if event_name == "":
+    if event_description == "":
         return None
-    start_time = week_df[week_df[date_col_name] == event_name]["Time"].iloc[0]
-    end_time = week_df[week_df[date_col_name] == event_name]["Time"].iloc[-1]
+    start_time = week_df[week_df[date_col_name] == event_identifier]["Time"].iloc[0]
+    end_time = week_df[week_df[date_col_name] == event_identifier]["Time"].iloc[-1]
 
     # if date_col_name has (\d*) at the end, remove it
     date_col_name = re.sub(r"\(\d*\)$", "", date_col_name).strip()
@@ -84,44 +80,34 @@ def process_event(event_name:str, week_df, date_col_name, week_number):
     session_type = ""
     location = ""
     subject = ""
-    if is_online_time_slot(event_name, time_slot=start_time):
+    if is_online_time_slot(event_description, time_slot=start_time):
         location = "Online"
         session_type = "Lecture"
         start_time = ""
         end_time = ""
     elif re.search(r"\d{2}:\d{2}", start_time):
-        if is_online_time_slot(event_name, time_slot=end_time):
+        if is_online_time_slot(event_description, time_slot=end_time):
             end_time = "19:00"
         else:
             end_time = add_30_minutes(end_time)
 
-    if not session_type:
-        for lt in lecture_theatres:
-            if lt in event_name:
-                location = lt
-                session_type = "Lecture"
-
-        for key, values in type_indicators.items():
-            for value in values:
-                if value in event_name:
-                    session_type = key
-                    break
-
     for subject_i in subjects:
-        if event_name.startswith(subject_i):
+        if event_description.lower().startswith(subject_i.lower()):
             subject = subject_i
             break
 
     if not subject:
-        candidate_subject = event_name.split(':')[0]
-        if len(candidate_subject.split()) < 4:
+        candidate_subject = event_description.split(':')[0]
+        if len(candidate_subject.split()) < 6: # Max items chosen arbitrarily as what feels too long
             subject = candidate_subject
+        else:
+            print(f"Warning: Could not determine subject for {event_description}")
 
     return {
         "week": week_number,
         "day": date_obj.strftime("%A"),
         "date": date_obj.strftime("%Y-%m-%d"),
-        "event": event_name,
+        "description": event_identifier.replace("\n", "; "),
         "start_time": start_time,
         "end_time": end_time,
         "location": location,
