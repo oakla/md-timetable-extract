@@ -4,7 +4,7 @@ import octk
 from md_timetable_extract import structs, process_timetable, etl, post_processing
 import conf
 
-input_file = r"content\input_pdfs\2025 Timetable _V2.pdf"
+input_file = conf.input_timetable
 calendar_views: list[structs.CalendarWeekView] = etl.get_weekly_calendar_views(input_file)
 
 all_events = []
@@ -15,5 +15,5 @@ for calendar_view in calendar_views:
 df = pd.DataFrame(all_events)
 df = post_processing.post_process_events(df)
 
-output_file = octk.uniquify(r"content\output\scraped\2025_timetable.csv")
+output_file = octk.uniquify(conf.scraped_output_path)
 df.to_csv(output_file, index=False)

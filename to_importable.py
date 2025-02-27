@@ -11,6 +11,8 @@ TimetableField = Literal[
     'location', 'session_type', 'subject', 'presenter'
 ]
 
+import conf
+
 # Predefined set of strings
 WEEK = 'week'
 DAY = 'day'
@@ -142,7 +144,7 @@ class EventRow:
             'Private': False
         }
 
-input_file = r'E:\alexa\OneDrive\130-Reference\UWA\MD1\Self-management\2025_AO_Scraped_timetable_V2.xlsx'
+input_file = conf.input_csv
 
 df = pd.read_excel(input_file)
 # convert nan to empty string
@@ -153,7 +155,7 @@ for i, row in df.iterrows():
     event = EventRow(row)
     new_csv_rows.append(event.to_csv_dict())
 
-csv_file = r'content\output\importables\output.csv'
+csv_file = conf.output_csv
 with open(csv_file, 'w', newline='') as file:
     writer = csv.DictWriter(file, fieldnames=new_csv_rows[0].keys())
     writer.writeheader()
