@@ -1,10 +1,8 @@
 import pandas as pd 
 import octk
 
-import structs
-import process_timetable
-import etl
-import post_processing
+from md_timetable_extract import structs, process_timetable, etl, post_processing
+import conf
 
 input_file = r"content\input_pdfs\2025 Timetable _V2.pdf"
 calendar_views: list[structs.CalendarWeekView] = etl.get_weekly_calendar_views(input_file)

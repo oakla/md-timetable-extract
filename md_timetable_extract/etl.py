@@ -3,7 +3,7 @@
 
 import camelot
 import pandas as pd
-import structs
+from md_timetable_extract import structs
 
 def is_key_table(table: camelot.core.Table) -> bool:
     return table.df.iloc[0, 0].strip().lower() == 'key'
