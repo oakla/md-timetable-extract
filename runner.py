@@ -1,7 +1,7 @@
 import pandas as pd 
 import octk
-import structs
 
+import structs
 import process_timetable
 import etl
 import post_processing
