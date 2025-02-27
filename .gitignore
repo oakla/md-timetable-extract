@@ -1,7 +1,7 @@
 /.vscode
 /proto-typing
 /content
-
+conf.py
 
 /__pycache__
 # Byte-compiled / optimized / DLL files
