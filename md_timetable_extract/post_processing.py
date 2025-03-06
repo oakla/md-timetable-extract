@@ -38,6 +38,7 @@ presenter_indicators = {
     'Marcus Dabner': ["Marcus Dabner", '(MD)'],
     'Nicole Swarbrick': ["Nicole Swarbrick", '(NS)'],
     'Patricia Martinez': ["Patricia Martinez", '(PM)'],
+    'Fiona Pixely': ["Fiona Pixely", '(FP)'],
 }
 
 type_to_location_map: dict[str,list] = {
