@@ -31,10 +31,10 @@ subjects = [
     'Pop Health',
     'Popn health',
     'Population Health',
+    'MicroModule',
     'Haematology',
     'Health Humanities'
 ]
-
 
 def add_30_minutes(time):
     hour, minute = time.split(":")
@@ -97,7 +97,7 @@ def process_event(event_description:str, week_df, date_col_name, week_number):
             break
 
     if not subject:
-        candidate_subject = event_description.split(':')[0]
+        candidate_subject = event_description.split('-')[0]
         if len(candidate_subject.split()) < 6: # Max items chosen arbitrarily as what feels too long
             subject = candidate_subject
         else:
@@ -107,7 +107,7 @@ def process_event(event_description:str, week_df, date_col_name, week_number):
         "week": week_number,
         "day": date_obj.strftime("%A"),
         "date": date_obj.strftime("%Y-%m-%d"),
-        "description": event_identifier.replace("\n", "; "),
+        "description": re.sub(r'\s+', ' ', event_identifier.replace("\n", " ")),
         "start_time": start_time,
         "end_time": end_time,
         "location": location,
