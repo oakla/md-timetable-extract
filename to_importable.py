@@ -3,12 +3,14 @@ from datetime import datetime
 import csv
 import re
 import pandas as pd
+from pathlib import Path
 
 from typing import Literal
 # Predefined set of strings type
 TimetableField = Literal[
     'week', 'day', 'date', 'event', 'start_time', 'end_time', 
-    'location', 'session_type', 'subject', 'presenter'
+    'location', 'session_type', 'subject', 'presenter', 'groups', 'topic'
+
 ]
 
 import conf
@@ -24,7 +26,27 @@ LOCATION = 'location'
 SESSION_TYPE = 'session_type'
 SUBJECT = 'subject'
 PRESENTER = 'presenter'
+GROUPS = 'groups'
+TOPIC = 'topic'
 
+SUBJECT_ABBREVIATIONS = {
+    'Aboriginal Health': 'AH',
+    'Anatomy': 'Anat',
+    "Behavioural Science": 'Behav Sci',
+    "Biochemistry": 'Biochem',
+    "Chemical Pathology": 'Chem Path',
+    "Clinical": 'Clin',
+    "Genetics": 'Gen',
+    "Immunology": 'Immun',
+    "Microbiology": 'Micro',
+    "MicroModule": 'MicroMod',
+    "Pathology": 'Path',
+    'Pharmacology': 'Pharm',
+    'Physiology': 'Phys',
+    'Population Health': 'Pop Hlth',
+    'Professionalism': 'Prof',
+    'Research': 'Res',
+}
 
 "Subject"
 "Start Date"
@@ -39,7 +61,9 @@ PRESENTER = 'presenter'
 
 class EventRow:
 
-    def __init__(self, row:pd.Series):
+    def __init__(self, row:pd.Series, include_session_type:bool = True):
+
+        self.include_session_type = include_session_type
 
         self.row = row
 
@@ -56,6 +80,8 @@ class EventRow:
         self.presenter = self.scrape_presenter()
         self.description = self.scrape_description()
 
+        
+
 
     def scrape_subject(self):
         self.subject = self.row[SUBJECT]
@@ -70,8 +96,29 @@ class EventRow:
 
 
     def make_name(self, row:pd.Series):
-        return f'{self.subject} - {self.session_type}'
 
+        acc = []
+        if self.include_session_type:
+            if row[SESSION_TYPE]:
+                acc.append(row[SESSION_TYPE])
+            if row[SUBJECT]:
+                acc.append(SUBJECT_ABBREVIATIONS[row[SUBJECT]] if row[SUBJECT] in SUBJECT_ABBREVIATIONS else row[SUBJECT])
+            if row[TOPIC]:
+                acc.append(row[TOPIC])
+        else:
+            if row[SUBJECT]:
+                acc.append(SUBJECT_ABBREVIATIONS[row[SUBJECT]] if row[SUBJECT] in SUBJECT_ABBREVIATIONS else row[SUBJECT])
+            if row[TOPIC]:
+                acc.append(row[TOPIC])
+
+        if not acc:
+            return row[DESCRIPTION]
+        name = '-'.join(acc)
+
+        # if len(name) > 100:
+        #     name = name[:97] + '...'
+
+        return name
 
     def __str__(self):
         return f'{self.name} - {self.start_date} {self.start_time} - {self.end_time} - {self.location} - {self.presenter} - {self.description}'
@@ -91,12 +138,12 @@ class EventRow:
         event_text = self.row[DESCRIPTION]
         # remove newline characters and double spaces
         event_text = re.sub(r'\s+', ' ', event_text)
-        
-        match = re.search(r'\w+:\s?(.+)', event_text)
-        if match:
-            return match.group(1).strip()
-        else:
-            return event_text.strip()
+        # match = re.search(r'\w+:\s?(.+)', event_text)
+        # if match:
+        #     return match.group(1).strip()
+        # else:
+        #     return event_text.strip()
+        return event_text.strip()
         
 
     def start_date(self, format='csv'):
@@ -143,22 +190,49 @@ class EventRow:
             'Location': self.location,
             'Private': False
         }
+    
 
-input_file = conf.input_csv
+def df_to_calendar_importable_csv(df: pd.DataFrame, output_file: str, include_session_type: bool = True):
+    """
+    Converts a DataFrame to a calendar importable CSV format.
+    """
+    if df.empty:
+        raise ValueError("DataFrame is empty. Cannot convert to calendar importable CSV.")
+    df = df.fillna('')  # Convert NaN to empty string
+    new_csv_rows = []
+    
+    for i, row in df.iterrows():
+        event = EventRow(row, include_session_type=include_session_type)
+        new_csv_rows.append(event.to_csv_dict())
+
+    with open(output_file, 'w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=new_csv_rows[0].keys())
+        writer.writeheader()
+        for row in new_csv_rows:
+            writer.writerow(row)
+
+
+def drop_groups(df: pd.DataFrame, groups: list[str]) -> pd.DataFrame:
+    """
+    Drops rows from the DataFrame where the 'groups' column contains any of the specified groups.
+    """
+    if 'groups' not in df.columns:
+        raise ValueError("DataFrame does not contain 'groups' column.")
+    
+    mask = df['groups'].apply(lambda x: not any(group in x for group in groups))
+    return df[mask]
+
+input_file = conf.input_xlsx
 
 df = pd.read_excel(input_file)
 # convert nan to empty string
 df = df.fillna('')
 
-new_csv_rows = []   
-for i, row in df.iterrows():
-    event = EventRow(row)
-    new_csv_rows.append(event.to_csv_dict())
+df_non_mandatory = df[df['is_mandatory'] == 0]
+assert not df_non_mandatory.empty, "No non-mandatory events found in the input file."
+df_mandatory = df[df['is_mandatory'] == 1]
 
-csv_file = conf.output_csv
-with open(csv_file, 'w', newline='') as file:
-    writer = csv.DictWriter(file, fieldnames=new_csv_rows[0].keys())
-    writer.writeheader()
-    for row in new_csv_rows:
-        writer.writerow(row)
+output_dir = Path(conf.output_csv).parent
+df_to_calendar_importable_csv(df_non_mandatory, Path(output_dir, 'output_non_mandatory.csv'), include_session_type=False)
+df_to_calendar_importable_csv(df_mandatory, Path(output_dir, 'output_mandatory.csv'), include_session_type=True)
 

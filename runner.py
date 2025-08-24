@@ -4,8 +4,12 @@ import octk
 from md_timetable_extract import extract, structs, process_timetable, post_processing
 import conf
 
+START_FROM_PAGE = 1
+IGNORE_PAGES = [14, 19, 20]
+
+
 input_file = conf.input_timetable
-calendar_views: list[structs.CalendarWeekView] = extract.get_weekly_calendar_views(input_file)
+calendar_views: list[structs.CalendarWeekView] = extract.get_weekly_calendar_views(input_file, ignore_pages=IGNORE_PAGES, start_page=START_FROM_PAGE)
 
 all_events = []
 for calendar_view in calendar_views:
@@ -16,21 +20,6 @@ df = pd.DataFrame(all_events)
 df = post_processing.post_process_events(df)
 
 output_file = octk.uniquify(conf.scraped_output_path)
-
-"week",
-"day",
-"date",
-"description",
-"start_time",
-"end_time",
-"location",
-"session_type",
-"subject",
-"presenter",
-"groups",
-"topic",
-"is_mandatory",
-"event_length",
 
 extra_columns = [
     "Label",
