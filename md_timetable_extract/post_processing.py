@@ -6,6 +6,29 @@ found_subjects = set()
 found_presenters = set()
 found_locations = set()
 
+
+MANDATORY_SESSION_TYPES = [
+    "Assessment",
+    "Lab",
+    "Workshop",
+    "TBL",
+    "SGL",
+    "Clinical Skills"
+]
+
+MANDATORY_INDICATORS = [
+    "RECORDED ATTENDANCE",
+    "Mandatory Attendance",
+]
+
+DROP_ROW_INDICATORS = [
+    "NON-TEACHING WEEK",
+]
+
+SESSION_TYPES_WITHOUT_SUBJECTS = [
+    "Assessment",
+]
+
 location_indicators_map = {
     "Path Museum": ['Path Museum', 'Pathology Museum', 'PathMuseum'],
     "Dissecting location": ['Dissecting location'],
@@ -18,15 +41,26 @@ location_indicators_map = {
 all_location_indicators = [item for sublist in location_indicators_map.values() for item in sublist]
 
 subject_indicators_map = {
-    'Research Skills': ['Research Skills'],
+    'Aboriginal Health': ['Aboriginal Health', 'Aboriginal Healt'],
+    'Assignment': ['Assignment'],
+    'Anatomy': ['Anatomy', 'ANAT'],
+    'Biochemistry': ['Biochemistry', 'Biochem'],
+    'Behavioural Science': ['Behavioural Science', 'Behav Sci'],
+    'Chemical Pathology': ['Chemical Pathology', 'Chem Path'],
+    'Clinical Skills': ['Clinical Skills'],
+    'Clinical': ['Clinical'],
+    'Genetics': ['Genetics'],
+    'Immunology': ['Immunology'],
     'Pharmacology': ['Pharmacology', 'Pharm'],
     'Physiology': ['Physiology', 'Physiol'],
-    'Aboriginal Health': ['Aboriginal Health', 'Aboriginal Healt'],
     'Population Health': ['Population Health', 'Pop Health', 'Popn Health'],
+    'Research Skills': ['Research Skills'],
+    'Self directed revision': ['Self directed revision', 'Self-directed revision'],
 }
 
 all_subject_indicators = [item for sublist in subject_indicators_map.values() for item in sublist]
 
+# TODO: this doesn't seem to do anything ...make it work
 presenter_indicators_map = {
     'Angus Cook': ["Angus Cook", '(AC)'],
     'Barbara Nattabi': ["Barbara Nattabi", '(BN)'],
@@ -49,44 +83,53 @@ presenter_indicators_map = {
 }
 
 type_to_location_map: dict[str,list] = {
-    "Lab": ["Physiology Lab"],
+    "Lab": ["Physiology Lab", "AHBL G05", "ANHB G05", "PHSL G11"],
     "Workshop": ["Med Lib e-learning"],
     "SGL": ["Pathology Museum"],
     "Clinical Skills": ["N Block"],
-    "Lecture": ["FJC LT", "Ross LT", "McCusker LT", "FJ Clark"],
+    "Lecture": [
+        *location_indicators_map["FJC"],
+        *location_indicators_map["Ross"],
+        *location_indicators_map["McCusker"],
+    ]
 }
 
+# words that, if found in the description, indicate the type of session
+#TODO: indicator values should be regexes, e.g. r"(?i)Lab .+ Group \d+"
 type_indicators = {
+    "Clinical Skills": ["Clinical Skills", "Clin Skills"],
     "SGL": ["SGL", "Small Group Learning"],
     "Lab": ["Lab Group", "ANHB G05", "PHSL G11"],
-    "Assessment": ["Assessment"],
+    "Assessment": ["Assessment", "^OSCE", '^Exam ', "IN SEMESTER TEST"],
     "TBL": ["TBL"],
     'Workshop': ['Workshop'],
+    "Deadline": ["Assignment due"],
 }
 
 def find_indicator(indicator_map, content):
     """
-    @param indicator_map: dict[str, list[str]] - key is the value to be returned, value is a list of indicators
-    @param content: str - the content to search for indicators in
+    @param indicator_map: dict[str, list[str]] - key is the value to be returned, value is a list of regex indicator patterns
+    @param content: str - the content to search for indicators
     @return: str - the key of the first indicator found in the content
     """
     for key, indicators in indicator_map.items():
         for indicator in indicators:
-            if indicator.lower() in content.strip().lower():
-                return indicator
+            if re.search(indicator, content.strip(), re.IGNORECASE):
+                return key
     return None
 
 def standardise_from_indicator(indicator_map, symbol):
     """
-    @param indicator_map: dict[str, list[str]] - key is the value to be returned, value is a list of indicators
-    @param content: str - the content to search for indicators in
-    @return: str - the key of the first indicator found in the content
+    look for the symbol in the indicator_map and return the key if found
+    @param indicator_map: dict[str, list[str]] - key is the value to be
+    returned, value is a list of indicators
+    @param symbol: str - the symbol to search for
     """
     for key, indicators in indicator_map.items():
         for indicator in indicators:
             if indicator.lower() in symbol.strip().lower():
                 return key
-    return symbol
+    return None
 
 
 def remove_duplicates(df):
@@ -140,16 +183,24 @@ def add_missing_location(df):
     return df
 
 
-def add_missing_subject(df): 
+def set_subject(df): 
     # for missing 'subject' values, search in 'description' column
     for index, row in df.iterrows():
+        if df.at[index, 'session_type'].lower() in [x.lower() for x in SESSION_TYPES_WITHOUT_SUBJECTS]:
+            df.at[index, 'subject'] = ""
+            continue
         subject_0 = ""
         if not pd.isna(row['subject']):
             subject_0 = row['subject'].strip()
         if subject_0:
+            ## If subject is already set, standardise it
             subject_1 = standardise_from_indicator(subject_indicators_map, subject_0)
         else:
-            subject_1 = standardise_from_indicator(subject_indicators_map, row['description'])
+            ## If subject is not set, try to find an indicator in the description
+            subject_1 = find_indicator(subject_indicators_map, row['description'])
+        if not subject_1:
+            ## If no indicator found, use the first word of the description as the subject
+            subject_1 = row['description'].split()[0] if row['description'] else ""
         new_subject = subject_1 if subject_1 else subject_0
         found_subjects.add(new_subject)
         df.at[index, 'subject'] = new_subject
@@ -157,40 +208,52 @@ def add_missing_subject(df):
     return df
 
 
-def add_missing_type(df):
+def set_session_type(df):
     # for missing 'session_type' values, search in 'description' column
     for index, row in df.iterrows():
-        # infer from description
-        if not row['session_type']:
-            session_type = find_indicator(type_indicators, row['description'])
+        session_type = find_indicator(type_indicators, row['description'])
+        if session_type:
+            df.at[index, 'session_type'] = session_type
+            continue
+        # infer from location
+        elif not pd.isna(row['location']):
+            suggested_session_type = standardise_from_indicator(type_to_location_map, row['location'])
+            session_type = suggested_session_type if suggested_session_type else ""
             if session_type:
                 df.at[index, 'session_type'] = session_type
-                continue
-            # infer from location
-            elif not pd.isna(row['location']):
-                session_type = standardise_from_indicator(type_to_location_map, row['location'])
-                if session_type:
-                    df.at[index, 'session_type'] = session_type
     return df
 
 def extract_group_numbers(description):
-    match = re.search(r'(?i)\bGroups?\s*(\d+(-\d+)?)\b', description)
-    return "'" + match.group(1).strip() if match else ""
+    match = re.search(r'(?i)\bGroups?\s*(\d+(\s*-\s*\d+)?)\b', description)
+    if not match:
+        return ""
+    # Remove spaces and return the group numbers as a string
+    groups_substring = re.sub(" ", "", match.group(1).strip())
+    return "'" + groups_substring if groups_substring else ""
 
 def add_groups_column(df):
     # Add a 'groups' column based on the 'description' column. Blank if session_type is lecture, otherwise uses number range found after word 'Group' or 'Groups'.
     df['groups'] = df.apply(lambda row: extract_group_numbers(row['description']) if row['session_type'].lower() != 'lecture' else "", axis=1)
     return df
 
-def extract_topic(description):
+def set_row_topic(row):
     # assume topic is after "<subject> - " and before the next '(' or '['
-    match = re.search(r'\s*?[-:]\s*(.*?)(\(|\[|$)', description)
+    match = re.search(r'(.*?)(?:\(|\[|$)', row['description'])
+    if match:
+        # Remove the subject part from the topic
+        topic = match.group(1).strip()
+        # Remove any leading subject name if it matches the subject column
+        if row['subject'] and topic.lower().startswith(row['subject'].lower()):
+            topic = topic[len(row['subject']):].strip()
+        # remove any leading hyphen, colon or dash
+        topic = re.sub(r'^[\-\:\s]+', '', topic)
+        return topic
 
     return match.group(1).strip() if match else ""
 
 def add_topics(df):
     # assume topic is after "<subject> - " and before the next '(' or '['
-    df['topic'] = df['description'].apply(extract_topic)
+    df['topic'] = df.apply(set_row_topic, axis=1)
     return df
 
 def trim_topic(df):
@@ -250,16 +313,82 @@ def add_presenter_column(df):
     return df
 
 
+def is_mandatory_session(row) -> bool:
+    """
+    Determines if a session is mandatory based on its type and description.
+    """
+    if row['session_type'] in MANDATORY_SESSION_TYPES:
+        return True
+    if any(indicator in row['description'] for indicator in MANDATORY_INDICATORS):
+        return True
+    return False
+
+
+def add_is_mandatory_column(df):
+    """
+    Adds a column 'is_mandatory' to the dataframe.
+    If the session_type is 'Assessment', it is mandatory.
+    Otherwise, it is not mandatory.
+    """
+    df['is_mandatory'] = df.apply(lambda x: 1 if is_mandatory_session(x) else 0, axis=1)
+    # df['is_mandatory'] = df.apply(is_mandatory_session, axis=1)
+    return df
+
+
+def drop_useless_rows(df):
+    """
+    Drops rows that are not useful for the timetable.
+    These are rows that contain 'NON-TEACHING WEEK' or 'Public Holiday' in the description.
+    """
+    df = df[~df['description'].str.contains('|'.join(DROP_ROW_INDICATORS), case=False, na=False)]
+    return df
+
+
+def add_event_length(row):
+    """
+    Adds an 'event_length' column to the row if 'start_time' and 'end_time' are present.
+    """
+    time_blank = False
+    if pd.isna(row['start_time']) or pd.isna(row['end_time']):
+        time_blank = True
+    if not row['start_time'] or not row['end_time']:
+        time_blank = True
+
+    if time_blank:
+        if row['location'].lower() == "online":
+            return 1
+        else:
+            return None
+
+    start_time = pd.to_datetime(row['start_time'], format='%H:%M', errors='coerce')
+    end_time = pd.to_datetime(row['end_time'], format='%H:%M', errors='coerce')
+    if pd.notna(start_time) and pd.notna(end_time):
+        return (end_time - start_time).total_seconds() / 60 / 60  # return length in hours
+    
+    return None
+
+
+def add_event_lengths(df):
+    """
+    Adds an 'event_length' column to the dataframe.
+    The length is calculated as the difference between 'end_time' and 'start_time'.
+    """
+    df['event_length'] = df.apply(add_event_length, axis=1)
+    return df
+
 
 def post_process_events(df):
+    df = drop_useless_rows(df)
     df = remove_duplicates(df)
     df = add_missing_location(df)
-    df = add_missing_subject(df)
-    df = add_missing_type(df)
+    df = set_session_type(df)
+    df = set_subject(df)
     df = add_presenter_column(df)
     df = add_groups_column(df)
     df = add_topics(df)
     df = trim_topic(df)
+    df = add_is_mandatory_column(df)
+    df = add_event_lengths(df)
     return df
 
 
