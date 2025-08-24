@@ -14,28 +14,6 @@ valid_days = [
     "Sunday",
 ]
 
-lecture_theatres = ["FJC", "Ross"]
-
-subjects = [
-    'Aboriginal Healt',
-    'Aboriginal Health',
-    "Anatomy",
-    "Behavioural Science",
-    'Biochemistry',
-    "Clinical",
-    'Clinical Skills',
-    "Pathology",
-    "Physiology",
-    "Pharmacology",
-    "Research skills",
-    'Pop Health',
-    'Popn health',
-    'Population Health',
-    'MicroModule',
-    'Haematology',
-    'Health Humanities'
-]
-
 def add_30_minutes(time):
     hour, minute = time.split(":")
     if minute == "00":
@@ -90,11 +68,6 @@ def process_event(event_description:str, week_df:pd.DataFrame, date_col_name:str
             end_time = "19:00"
         else:
             end_time = add_30_minutes(end_time)
-
-    for subject_i in subjects:
-        if event_description.lower().startswith(subject_i.lower()):
-            subject = subject_i
-            break
 
     if not subject:
         candidate_subject = event_description.split('-')[0]

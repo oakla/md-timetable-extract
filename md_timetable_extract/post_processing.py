@@ -29,6 +29,18 @@ SESSION_TYPES_WITHOUT_SUBJECTS = [
     "Assessment",
 ]
 
+INCLUDE_GROUPS = [
+    # "'1",
+    "'1-10",
+    # "'11-20",
+    # "'2",
+    "'3",
+    # "'11-15",
+    "'1-5",
+    # "'16-20",
+    # "'6-10",
+]
+
 location_indicators_map = {
     "Path Museum": ['Path Museum', 'Pathology Museum', 'PathMuseum'],
     "Dissecting location": ['Dissecting location'],
@@ -62,28 +74,29 @@ all_subject_indicators = [item for sublist in subject_indicators_map.values() fo
 
 # TODO: this doesn't seem to do anything ...make it work
 presenter_indicators_map = {
-    'Angus Cook': ["Angus Cook", '(AC)'],
-    'Barbara Nattabi': ["Barbara Nattabi", '(BN)'],
-    'David Preen': ["David Preen", '(DP)'],
-    'Fiona Pixely': ["Fiona Pixely", '(FP)'],
-    'Helen Wilcox': ["Helen Wilcox", '(HW)'],
-    'Jo Chua': ["Jo Chua", '(JC)'],
-    'Julie Saunders': ["Julie Saunders", '(JS)'],
-    'Liz Quail': ["Liz Quail", '(LQ)'],
-    'Marcus Dabner': ["Marcus Dabner", '(MD)'],
-    'Nicole Swarbrick': ["Nicole Swarbrick", '(NS)'],
-    'Patricia Martinez': ["Patricia Martinez", '(PM)'],
-    'Paul McGurgan': ["Paul McGurgan", '(PM)'],
-    "Peter Tan": ["Peter Tan", "(PT)"],
-    'Rob White': ["Rob White", '(RW)'],
-    'Shao Tneh': ["Shao Tneh", '(ST)'],
-    'Thomas Wilson': ["(TW)", "Thomas Wilson", 'Tom Wilson'],
-    'Tina Carter': ["Tina Carter", '(TC)'],
-    'Zaza Lyons': ["Zaza Lyons", '(ZL)'],
+    'Angus Cook': ["Angus Cook", 'AC'],
+    'Barbara Nattabi': ["Barbara Nattabi", 'BN'],
+    'David Preen': ["David Preen", 'DP'],
+    'Fiona Pixely': ["Fiona Pixely", 'FP'],
+    'Helen Wilcox': ["Helen Wilcox", 'HW'],
+    'Jo Chua': ["Jo Chua", 'JC'],
+    'Julie Saunders': ["Julie Saunders", 'JS'],
+    'Liz Quail': ["Liz Quail", 'LQ'],
+    'Marcus Dabner': ["Marcus Dabner", 'MD'],
+    'Nicole Swarbrick': ["Nicole Swarbrick", 'NS'],
+    'Patricia Martinez': ["Patricia Martinez", 'PM'],
+    'Paul McGurgan': ["Paul McGurgan", 'PM'],
+    "Peter Tan": ["Peter Tan", "PT"],
+    'Rob White': ["Rob White", 'RW'],
+    'Shao Tneh': ["Shao Tneh", 'ST'],
+    'Thomas Wilson': ["TW", "Thomas Wilson", 'Tom Wilson'],
+    'Tina Carter': ["Tina Carter", 'TC'],
+    'Zaza Lyons': ["Zaza Lyons", 'ZL'],
 }
 
 type_to_location_map: dict[str,list] = {
-    "Lab": ["Physiology Lab", "AHBL G05", "ANHB G05", "PHSL G11"],
+    "Lab": [
+        "Physiology Lab", "AHBL G05", "ANHB G05", "PHSL G11"],
     "Workshop": ["Med Lib e-learning"],
     "SGL": ["Pathology Museum"],
     "Clinical Skills": ["N Block"],
@@ -153,25 +166,23 @@ def extract_location(event_description: str) -> str:
     if not event_description:
         return ""
     
-    rtn_location = ""    # First try to find location in square brackets
+    # First try to find one of the standard location indicators
+    for location, indicators in location_indicators_map.items():
+        for indicator in indicators:
+            if indicator.lower() in event_description.strip().lower():
+                return location
+
     matches = [x.strip() for x in re.findall(r'\[([^\]]+)\]', event_description)]
-    if matches:
-        for match in matches:
-            if not is_invalid_location(match):
-                rtn_location = match.strip()
-                standardised_location = standardise_from_indicator(location_indicators_map, rtn_location)
-                rtn_location = standardised_location if standardised_location else rtn_location
-                break
+    return "" if not matches else matches[0]
+    # if matches:
+    #     for match in matches:
+    #         if not is_invalid_location(match):
+    #             rtn_location = match.strip()
+    #             standardised_location = standardise_from_indicator(location_indicators_map, rtn_location)
+    #             rtn_location = standardised_location if standardised_location else rtn_location
+    #             break
 
-    # If no match, try to find location using indicators
-    if not rtn_location:
-        for location, indicators in location_indicators_map.items():
-            for indicator in indicators:
-                if indicator.lower() in event_description.strip().lower():
-                    rtn_location = location
-                    break
-    return rtn_location
-
+    #     return rtn_location
 
 def add_missing_location(df):
     # if 'location' column is empty, try to extract location from 'description' column
@@ -257,19 +268,18 @@ def add_topics(df):
     return df
 
 def trim_topic(df):
-    """ Remove anything from topic after and including terms that appear in location, or subject indicators """
+    """ Remove anything from topic after and including terms that appear in location, or a pair of brackets """
     for index, row in df.iterrows():
         topic = row['topic']
-        # Check against location indicators
-        for loc in all_location_indicators:
-            if loc in topic:
-                topic = topic.split(loc)[0].strip()
-                break
-        # Check against subject indicators
-        for subj in all_subject_indicators:
-            if subj in topic:
-                topic = topic.split(subj)[0].strip()
-                break
+        # # Check against location indicators
+        # for loc in all_location_indicators:
+        #     if loc in topic:
+        #         topic = topic.split(loc)[0].strip()
+        #         break
+        # Check for brackets
+        match = re.search(r'(.*?)(?:\(|\[|$)', topic)
+        if match:
+            topic = match.group(1).strip()
         df.at[index, 'topic'] = topic
     return df
 
@@ -377,6 +387,17 @@ def add_event_lengths(df):
     return df
 
 
+def drop_unwanted_groups(df):
+    """ Drops rows from the DataFrame where the 'groups' column does not contain any of the specified groups
+    or if the 'groups' column is NOT empty."""
+    if 'groups' not in df.columns:
+        return df
+    if not INCLUDE_GROUPS:
+        return df
+    mask = df['groups'].apply(lambda x: any(group in x for group in INCLUDE_GROUPS) or x.strip() == "")
+    return df[mask]
+
+
 def post_process_events(df):
     df = drop_useless_rows(df)
     df = remove_duplicates(df)
@@ -385,6 +406,7 @@ def post_process_events(df):
     df = set_subject(df)
     df = add_presenter_column(df)
     df = add_groups_column(df)
+    df = drop_unwanted_groups(df)
     df = add_topics(df)
     df = trim_topic(df)
     df = add_is_mandatory_column(df)
