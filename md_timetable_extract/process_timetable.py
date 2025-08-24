@@ -64,7 +64,7 @@ def is_online_time_slot(event, time_slot):
     return False
 
 
-def process_event(event_description:str, week_df, date_col_name, week_number):
+def process_event(event_description:str, week_df:pd.DataFrame, date_col_name:str, week_number:int) -> dict | None:
     event_identifier = event_description
     event_description = re.sub(r'\s+',' ', event_description).strip()
 
@@ -116,7 +116,7 @@ def process_event(event_description:str, week_df, date_col_name, week_number):
     }
 
 
-def get_days_events(date, week_number, week_df):
+def get_days_events(date:str, week_number:int, week_df:pd.DataFrame) -> list[dict]:
     events = week_df[date].unique()
     return [
         x
@@ -125,7 +125,7 @@ def get_days_events(date, week_number, week_df):
     ]
 
 
-def process_week_days(week_number, week_df):
+def process_week_days(week_number:int, week_df:pd.DataFrame) -> list[dict]:
     events = []
     for date in week_df.columns[1:]:
         day_events = get_days_events(date, week_number, week_df=week_df)
