@@ -69,13 +69,6 @@ def process_event(event_description:str, week_df:pd.DataFrame, date_col_name:str
         else:
             end_time = add_30_minutes(end_time)
 
-    if not subject:
-        candidate_subject = event_description.split('-')[0]
-        if len(candidate_subject.split()) < 6: # Max items chosen arbitrarily as what feels too long
-            subject = candidate_subject
-        else:
-            print(f"Warning: Could not determine subject for {event_description}")
-
     return {
         "week": week_number,
         "day": date_obj.strftime("%A"),
