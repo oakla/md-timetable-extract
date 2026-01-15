@@ -3,8 +3,8 @@ import numpy as np
 from typing import List
 from pathlib import Path
 
-NEW_CSV_FILE = r"E:\alexa\Code\proj\md-timetable-extract\content\output\scraped\2025 IMED3112 Timetable STUDENTS v2d(2).csv"
-OLD_CSV_FILE = r"E:\alexa\Code\proj\md-timetable-extract\content\output\scraped\2025 IMED3112 Timetable STUDENTS v2c(2)(11).csv"
+NEW_CSV_FILE = r"E:\alexa\Code\proj\md-timetable-extract\content\output\scraped\2025 IMED3112 Timetable STUDENTS v4.csv"
+OLD_CSV_FILE = r"E:\alexa\Code\proj\md-timetable-extract\content\output\scraped\2025 IMED3112 Timetable STUDENTS v3(1)(1).csv"
 
 OUTPUT_DIR = r"E:\alexa\Code\proj\md-timetable-extract\content\output\changes"
 CHANGES_PREVIOUS_OUTPUT = Path(OUTPUT_DIR, r"previous_events.csv")

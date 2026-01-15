@@ -6,6 +6,8 @@ import camelot
 import pandas as pd
 from md_timetable_extract import structs
 
+pd.options.mode.chained_assignment = None
+
 def is_key_table(table: camelot.core.Table) -> bool:
     return table.df.iloc[0, 0].strip().lower() == 'key'
 
@@ -147,7 +149,7 @@ def interpolate_week_view(df: pd.DataFrame) -> pd.DataFrame:
 
     # find first row with number in the time column
     for i, row in base_df.iterrows():
-        if row[0].isdigit():
+        if row.iloc[0].isdigit():
             break
     time_start_row = i
 

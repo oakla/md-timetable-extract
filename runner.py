@@ -25,9 +25,10 @@ extra_columns = [
     "Label",
     "watched",
     "Partial",
-    "Review from",
-    "Note",
+    "Notes-Done", 
     "Skip",
+    "Note",
+    "System",
     "Milestone",
 ]
 
@@ -35,20 +36,27 @@ extra_columns = [
 for col in extra_columns:
     df[col] = ""
 
+
+# if column called 'week' exists, rename it to 'wk'
+if 'week' in df.columns:
+    df = df.rename(columns={'week': 'wk'})
+
+
 # reorder columns
 df = df[[
     "Label",
-    "watched",
-    "Partial",
-    "session_type",
-    "Review from",
-    "Note",
-    "presenter",
-    "Skip",
-    "week",
-    "subject",
-    "event_length",
-    "description",
+	"watched",
+	"Partial",
+	"Notes-Done",
+	"Skip",
+	"session_type",
+	"Note",
+	"wk",
+	"subject",
+	"presenter",
+	"System",
+	"event_length",
+	"description",
     "topic",
     "day",
     "date",

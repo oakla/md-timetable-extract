@@ -1,0 +1,112 @@
+week,week,day,day,date,date,description,description,start_time,start_time,end_time,end_time,location,location,session_type,session_type,subject,subject,presenter,presenter,groups,groups,topic,topic,is_mandatory,is_mandatory,event_length,event_length
+self,other,self,other,self,other,self,other,self,other,self,other,self,other,self,other,self,other,self,other,self,other,self,other,self,other,self,other
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,MicroModule,MicroModule:,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,MicroModule,MicroModule:,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,Pathology SGL - Respiratory (Hadley Museum) Groups 1- 5,Pathology SGL - Respiratory (Hadley Museum) Groups 1-5,,,,,,,,,,,,,,,,,,,,
+,,,,,,Pathology SGL - Respiratory (Hadley Museum) Groups 6- 10,Pathology SGL - Respiratory (Hadley Museum) Groups 6-10,,,,,,,,,,,,,,,,,,,,
+,,,,,,Anatomy - Abdominal wall (TW) [Ross],Anatomy - Abdominal wall (Tom Wilson) [Ross],,,,,,,,,,,TW,Thomas Wilson,,,,,,,,
+,,,,,,Anatomy - Histological Patterns of the GIT (TW) [Ross],Anatomy - Histological Patterns of the GIT (Tom Wilson) [Ross],,,,,,,,,,,TW,Thomas Wilson,,,,,,,,
+,,,,,,Physiology - GIT coordination (RW) [FJ Clark],Physiology - GIT coordination (Rob White) [FJ Clark],,,,,,,,,,,RW,Rob White,,,,,,,,
+,,,,,,Physiology - Gastric Secretion (RW) [FJ Clark],Physiology - Gastric Secretion (Rob White) [FJ Clark],,,,,,,,,,,RW,Rob White,,,,,,,,
+,,,,,,Anatomy - Foregut Development (TW) [FJ Clark],Anatomy - Foregut Development (Tom Wilson) [FJ Clark],,,,,,,,,,,TW,Thomas Wilson,,,,,,,,
+,,,,,,"Anatomy - Midgut and Hindgut Development, Omenta and Sacs (TW) [FJ Clark]","Anatomy - Midgut and Hindgut Development, Omenta and Sacs (Tom Wilson) [FJ Clark]",,,,,,,,,,,TW,Thomas Wilson,,,,,,,,
+,,,,,,Physiology - Digestion (RW) [FJ Clark],Physiology - Digestion (Rob White) [FJ Clark],,,,,,,,,,,RW,Rob White,,,,,,,,
+,,,,,,Physiology - Absorption (RW) [FJ Clark],Physiology - Absorption (Rob White) [FJ Clark],,,,,,,,,,,RW,Rob White,,,,,,,,
+,,,,,,Pathology - Oral cavity (MD) [FJ Clark],Pathology - Overview of GIT pathology (Marcus Dabner) [FJ Clark],,,10:00,11:00,,,,,,,MD,Marcus Dabner,,,Oral cavity,Overview of GIT pathology,,,1.0,2.0
+,,,,,,Anatomy - GIT Blood and Nerve Supply (TW) [Ross],Anatomy - GIT Blood and Nerve Supply (Tom Wilson) [Ross],,,,,,,,,,,TW,Thomas Wilson,,,,,,,,
+,,,,,,Anatomy - Anatomy and Histology of the Exocrine Foregut (TW) [Ross],Anatomy - Anatomy and Histology of the Exocrine Foregut (Tom Wilson) [Ross],,,,,,,,,,,TW,Thomas Wilson,,,,,,,,
+,,,,,,Pharmacology - Obesity (FP) [FJ Clark],Pharmacology - Obesity (Fiona Pixley) [FJ Clark],,,,,,,,,,,FP,Fiona Pixley,,,,,,,,
+,,,,,,Pathology - Overview of GIT pathology (MD) [FJ Clark],Pathology - Oesophagus (Marcus Dabner) [FJ Clark],,,11:00,10:00,,,,,,,MD,Marcus Dabner,,,Overview of GIT pathology,Oesophagus,,,2.0,1.0
+,,,,,,Pathology - Salivary glands (Marcus Dabner) [FJ Clark],Pathology - Small bowel disease (Dilini Gunawardena) [FJ Clark],11:00,10:00,12:00,11:00,,,,,,,Marcus Dabner,Dilini Gunawardena,,,Salivary glands,Small bowel disease,,,,
+,,Thursday,Wednesday,2025-08-07,2025-08-06,Clinical Seminar - Overview of the Gastrointestinal History with an upper GI focus (HW) 1.5 hrs [FJ Clark],Pathology - Stomach (Ming Chai) [FJ Clark],09:00,11:00,19:00,12:00,,,,,Clinical,Pathology,HW,Ming Chai,,,Seminar - Overview of the Gastrointestinal History with an upper GI focus,Stomach,,,10.0,1.0
+,,,,,,Population Health - Over and undernutrition (SH) [FJ Clark],Clinical Seminar - Overview of the Gastrointestinal History with an upper GI focus (Helen Wilcox) 1.5 hrs [FJ Clark],11:00,09:00,12:00,19:00,,,,,Population Health,Clinical,SH,Helen Wilcox,,,Over and undernutrition,Seminar - Overview of the Gastrointestinal History with an upper GI focus,,,1.0,10.0
+,,Friday,Thursday,2025-08-08,2025-08-07,Pharmacology - Drugs in PUD and GORD (BM) [ online],Population Health - Over and undernutrition (S Hickling) [FJ Clark],,11:00,,12:00,Online,FJC,Online,Lecture,Pharmacology,Population Health,BM,S Hickling,,,Drugs in PUD and GORD,Over and undernutrition,,,,
+7.0,6.0,Monday,Friday,2025-08-11,2025-08-08,Pathology - Oesophagus (MD) [FJ Clark],Pharmacology - Drugs in PUD and GORD (BM) [ online],13:00,,14:00,,FJC,Online,,,Pathology,Pharmacology,MD,BM,,,Oesophagus,Drugs in PUD and GORD,,,,
+,,,,,,Pathology - Bowel cancer 1 (MD) [FJ Clark],Pathology - Bowel cancer 1 (Tristan Rutland) [FJ Clark],14:00,13:00,15:00,14:00,,,,,,,MD,Tristan Rutland,,,,,,,,
+,,,,,,Pathology - Small bowel disease (DG) [FJ Clark],Pathology - Bowel cancer 2 (Tristan Rutland) [FJ Clark],15:00,14:00,16:00,15:00,,,,,,,DG,Tristan Rutland,,,Small bowel disease,Bowel cancer 2,,,,
+,,,,,,Pathology - Stomach (MC) [FJ Clark],"Self directed revision: Introduction to Parasitology in Humans. (Focus on Giardia, Entamoeba, Cryptosporidia, Strongyloides &",16:00,,17:00,,FJC,Online,,,Pathology,Self directed revision,MC,,,,Stomach,Introduction to Parasitology in Humans.,,,,
+,,Monday,Tuesday,2025-08-11,2025-08-12,"Self directed revision: Introduction to Parasitology in Humans. (Focus on Giardia, Entamoeba, Cryptosporidia, Strongyloides & Enterobius)",Anatomy - Abdominal viscera [AHBL G05] Group 1,,09:00,,11:00,Online,AHBL G05,Online,Lab,Self directed revision,Anatomy,"Focus on Giardia, Entamoeba, Cryptosporidia, Strongyloides & Enterobius",AHBL G05,,'1,Introduction to Parasitology in Humans.,Abdominal viscera,0.0,1.0,1.0,2.0
+,,,,,,Anatomy - Abdominal viscera [AHBL G05] Group 1,Anatomy - Abdominal viscera [AHBL G05] Group 2,09:00,11:00,11:00,13:00,,,,,,,,,'1,'2,,,,,,
+,,,,,,Anatomy - Abdominal viscera [AHBL G05] Group 2,Anatomy - Abdominal viscera [AHBL G05] Group 3,11:00,14:00,13:00,16:00,,,,,,,,,'2,'3,,,,,,
+,,,,,,Anatomy - Abdominal viscera [AHBL G05] Group 3,Micromodule: Viral gastroenteritis,14:00,,16:00,,AHBL G05,Online,Lab,Lecture,Anatomy,Micromodule:,AHBL G05,,'3,,Abdominal viscera,Viral gastroenteritis,1.0,0.0,2.0,1.0
+,,Tuesday,Wednesday,2025-08-12,2025-08-13,Micromodule: Viral gastroenteritis,Population Health - communicable diarrhoeal diseases [B Nattabi] [FJ Clark],,08:00,,9:00,Online,B Nattabi,Online,,MicroModule,Population Health,,B Nattabi,,,Viral gastroenteritis,communicable diarrhoeal diseases,,,,
+,,,,,,Population Health - communicable diarrhoeal diseases [BN] [FJ Clark],Anatomy - The oral cavity and salivary glands (Tom Wilson) [FJ Clark],08:00,09:00,9:00,10:00,BN,FJC,BN,Lecture,Population Health,Anatomy,BN,Thomas Wilson,,,communicable diarrhoeal diseases,The oral cavity and salivary glands,,,,
+,,,,,,Anatomy - The oral cavity and salivary glands (TW) [FJ Clark],Pathology - Oral cavity + upper aerodigestive tract (Marcus Dabner) [FJ Clark],09:00,10:00,10:00,11:00,,,,,Anatomy,Pathology,TW,Marcus Dabner,,,The oral cavity and salivary glands,Oral cavity + upper aerodigestive tract,,,,
+,,,,,,MicroModule Revision Guide: Gastrointestinal and intrabdominal bacterial infections,Pathology - Salivary glands (Marcus Dabner) [FJ Clark],,11:00,,12:00,Online,FJC,Online,Lecture,MicroModule,Pathology,,Marcus Dabner,,,Revision Guide: Gastrointestinal and intrabdominal bacterial infections,Salivary glands,,,,
+,,Thursday,Wednesday,2025-08-14,2025-08-13,Population Health - Screening (Angus Cook) [FJ Clark],MicroModule Revision Guide: Gastrointestinal and intrabdominal bacterial infections,09:00,,10:00,,FJC,Online,,,Population Health,MicroModule,Angus Cook,,,,Screening,Revision Guide: Gastrointestinal and intrabdominal bacterial infections,,,,
+,,,,,,Immunology - Immunology of Gastrointestinal Disease (Lloyd D'Orsogna) [FJ Clark],Population Health - Screening (Angus Cook) [FJ Clark],10:00,09:00,11:00,10:00,,,,,Immunology,Population Health,Lloyd D'Orsogna,Angus Cook,,,,Screening,,,,
+,,,,,,Pathology - Bowel cancer 2 (MD) [FJ Clark],Immunology - Immunology of Gastrointestinal Disease (Lloyd D'Orsogna) [FJ Clark],11:00,10:00,12:00,11:00,,,,,Pathology,Immunology,MD,Lloyd D'Orsogna,,,Bowel cancer 2,,,,,
+,,Thursday,Friday,2025-08-14,2025-08-15,Pathology - Medical conditions of bowel (SK) [online],Pathology SGL - GIT 1 (Path Museum) Groups 11-15,,09:00,,10:00,Online,Path Museum,Online,SGL,,,SK,Various,,'11-15,Medical conditions of bowel,SGL - GIT 1,0.0,1.0,,
+,,,,,,Pathology SGL - GIT 1 (Path Museum) Groups 11-15,Pathology SGL - GIT 1 (Path Museum) Groups 16-20,09:00,10:00,10:00,11:00,,,,,,,,,'11-15,'16-20,,,,,,
+,,,,,,Pathology SGL - GIT 1 (Path Museum) Groups 16-20,Clinical Skills - GIT History Taking Groups 11-20 [N Block],10:00,11:00,11:00,13:00,Path Museum,N Block,SGL,Clinical Skills,Pathology,Clinical,,,'16-20,'11-20,SGL - GIT 1,Skills - GIT History Taking Groups 11-20,,,1.0,2.0
+,,,,,,Clinical Skills - GIT History Taking Groups 11-20 [N Block],Clinical Skills - GIT History Taking Groups 1-10 [N Block],11:00,09:00,13:00,11:00,,,,,,,,,'11-20,'1-10,Skills - GIT History Taking Groups 11-20,Skills - GIT History Taking Groups 1-10,,,,
+,,,,,,Clinical Skills - GIT History Taking Groups 1-10 [N Block],Pathology SGL - GIT 1 (Path Museum) Groups 1-5,09:00,11:00,11:00,12:00,N Block,Path Museum,Clinical Skills,SGL,Clinical,Pathology,,,'1-10,'1-5,Skills - GIT History Taking Groups 1-10,SGL - GIT 1,,,2.0,1.0
+,,,,,,Pathology SGL - GIT 1 (Path Museum) Groups 1-5,Pathology SGL - GIT 1 (Path Museum) Groups 6-10,11:00,12:00,12:00,13:00,,,,,,,,,'1-5,'6-10,,,,,,
+7.0,8.0,Friday,Monday,2025-08-15,2025-08-18,Pathology SGL - GIT 1 (Path Museum) Groups 6- 10,Clinical Seminar - GIT Examination (HW) [Ross LT],12:00,09:00,13:00,11:00,Path Museum,Ross,SGL,Lecture,Pathology,Clinical,Various,HW,'6-10,,SGL - GIT 1,Seminar - GIT Examination,1.0,0.0,1.0,2.0
+,,,,,,Clinical Seminar - GIT Examination (HW) [Ross LT],Anatomy - Gross Anatomy of the Pharynx and Swallowing (TW) [FJ Clark],09:00,13:00,11:00,14:00,Ross,FJC,,,Clinical,Anatomy,HW,TW,,,Seminar - GIT Examination,Gross,,,2.0,1.0
+,,,,,,Anatomy - Gross Anatomy of the Pharynx and Swallowing (TW) [FJ Clark],Physiology - Liver (RW) [FJ Clark],13:00,14:00,14:00,15:00,,,,,Anatomy,Physiology,TW,RW,,,Gross,Liver,,,,
+,,,,,,Physiology - Liver (RW) [FJ Clark],Pathology - Medical liver disease (Dan Houghton) [FJ Clark],14:00,15:00,15:00,16:00,,,,,Physiology,Pathology,RW,Dan Houghton,,,Liver,Medical liver disease,,,,
+,,,,,,Pathology - Medical liver disease (DH) [FJ Clark],Pathology - Medical conditions of bowel (Sheng Khor) [FJ Clark],11:00,10:00,12:00,11:00,,,,,,,DH,Sheng Khor,,,Medical liver disease,Medical conditions of bowel,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,HW,,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,Pathology SGL - GIT 2 (Path Museum) Groups 6- 10,Pathology SGL - GIT 2 (Path Museum) Groups 6-10,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,90 min seminar,,,,,,,,,,,,,
+,,,,,,Clinical Seminar - Urology (DH) [FJ Clark],Clinical Seminar - Urology (Dickon Hayne) [FJ Clark],,,,,,,,,,,DH,Dickon Hayne,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,"Assigment due - 23:59 deadline, submission via LMS.","Assignment due - 23:59 deadline, submission via LMS.",,,,,,,,Deadline,Assigment due,Assignment,,,,,"23:59 deadline, submission via LMS.","due - 23:59 deadline, submission via LMS.",,,,
+,,Friday,Thursday,2025-09-12,2025-09-11,Clinical TBL - Harry's Passing Blood QE2MDLIB: eLS Groups 11-20,"Pathology - Urolithiasis, cystic kidneys, congenital kidney disease (Nicole Swarbrick) [FJ Clark]",09:00,15:00,11:00,16:00,QE2MDLIB,FJC,TBL,Lecture,Clinical,Pathology,Various,Nicole Swarbrick,'11-20,,TBL - Harry's Passing Blood,"Urolithiasis, cystic kidneys, congenital kidney disease",1.0,0.0,2.0,1.0
+,,Friday,Thursday,2025-09-12,2025-09-11,"Clinical Skills - Renal history, exam and urinalysis Groups 11-20 [N Block]",Pathology - Renal tract tumors (Nicole Swarbrick) [FJ Clark],11:00,16:00,13:00,17:00,N Block,FJC,Clinical Skills,Lecture,Clinical,Pathology,Various,Nicole Swarbrick,'11-20,,"Skills - Renal history, exam and urinalysis Groups 11-20",Renal tract tumors,1.0,0.0,2.0,1.0
+,,,,,,"Clinical Skills - Renal history, exam and urinalysis Groups 1-10 [N Block]",Clinical TBL - Harry's Passing Blood QE2MDLIB: eLS Groups 11-20,,,,,N Block,QE2MDLIB,Clinical Skills,TBL,,,,,'1-10,'11-20,"Skills - Renal history, exam and urinalysis Groups 1-10",TBL - Harry's Passing Blood,,,,
+,,,,,,Clinical TBL - Harry's Passing Blood QE2MDLIB: eLS Groups 1-10,"Clinical Skills - Renal history, exam and urinalysis Groups 11-20 [N Block]",,,,,QE2MDLIB,N Block,TBL,Clinical Skills,,,,,'1-10,'11-20,TBL - Harry's Passing Blood,"Skills - Renal history, exam and urinalysis Groups 11-20",,,,
+12.0,11.0,Monday,Friday,2025-09-15,2025-09-12,Pathology - Glomerulonephritis (DW) [FJ Clark],"Clinical Skills - Renal history, exam and urinalysis Groups 1-10 [N Block]",13:00,09:00,14:00,11:00,FJC,N Block,Lecture,Clinical Skills,Pathology,Clinical,DW,Various,,'1-10,Glomerulonephritis,"Skills - Renal history, exam and urinalysis Groups 1-10",0.0,1.0,1.0,2.0
+12.0,11.0,Monday,Friday,2025-09-15,2025-09-12,Pathology - Tubulointerstitial disease (DW) [FJ Clark],Clinical TBL - Harry's Passing Blood QE2MDLIB: eLS Groups 1-10,14:00,11:00,15:00,13:00,FJC,QE2MDLIB,Lecture,TBL,Pathology,Clinical,DW,Various,,'1-10,Tubulointerstitial disease,TBL - Harry's Passing Blood,0.0,1.0,1.0,2.0
+,,,,,,Clinical Seminar - Kidney Failure (Neil Boudville) [FJ Clark] 1.5h,Pathology - Glomerulonephritis (Daniel Wong) [FJ Clark],15:00,13:00,16:30,14:00,,,,,Clinical,Pathology,Neil Boudville,Daniel Wong,,,Seminar - Kidney Failure,Glomerulonephritis,,,1.5,1.0
+,,,,,,Pathology of GN module (DW),Pathology - Tubulointerstitial disease (Daniel Wong) [FJ Clark],,14:00,,15:00,Online,FJC,Online,Lecture,,,DW,Daniel Wong,,,of GN module,Tubulointerstitial disease,,,,
+,,Tuesday,Monday,2025-09-16,2025-09-15,Aboriginal Health - Approach to CKD including CAMDH content [Talila Milroy & Alex Balzarelli],Clinical Seminar - Kidney Failure (Neil Boudville) [FJ Clark] 1.5h,,15:00,,16:30,Online,FJC,Online,Lecture,Aboriginal Health,Clinical,Talila Milroy & Alex Balzarelli,Neil Boudville,,,Approach to CKD including CAMDH content,Seminar - Kidney Failure,,,1.0,1.5
+,,Wednesday,Monday,2025-09-17,2025-09-15,Pharmacology - Drugs in kidney disease (Ben Tan) [FJ Clark],Pathology of GN module (DW),08:00,,9:00,,FJC,Online,,,Pharmacology,Pathology,Ben Tan,DW,,,Drugs in kidney disease,of GN module,,,,
+,,Wednesday,Tuesday,2025-09-17,2025-09-16,"Pathology - Urolithiasis, cystic kidneys, congenital kidney disease (NS) [online]",Aboriginal Health - Approach to CKD including CAMDH content [Talila Milroy & Alex Balzarelli],,,,,,,Online,Lecture,Pathology,Aboriginal Health,NS,Talila Milroy & Alex Balzarelli,,,"Urolithiasis, cystic kidneys, congenital kidney disease",Approach to CKD including CAMDH content,,,,
+,,,,,,Pathology - Renal tract tumors (NS) [online],Pharmacology - Drugs in kidney disease (Ben Tan) [FJ Clark],,08:00,,9:00,Online,FJC,Online,Lecture,Pathology,Pharmacology,NS,Ben Tan,,,Renal tract tumors,Drugs in kidney disease,,,,
+,,Thursday,Wednesday,2025-09-25,2025-09-24,,,09:00,11:00,10:00,12:00,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,QE2MDLIB,,,,,,,,,,,,,
+,,,,,,,,,,,,,,QE2MDLIB,,,,,,,,,,,,,
+,,,,,,Pathology - Overview of Reproductive pathology (YW) [online],Clinical Seminar Radiology- Endocrine imaging/Nuclear Medicine (Ros Francis) [FJ Clark],,14:00,,16:00,Online,FJC,Online,Lecture,Pathology,Clinical,YW,Ros Francis,,,Overview of Reproductive pathology,Seminar Radiology- Endocrine imaging/Nuclear Medicine,,,1.0,2.0
+,,Friday,Thursday,2025-10-10,2025-10-09,Clinical TBL - Sweet Dilemmas QE2MDLIB: eLS Groups 11-20,Pathology - Overview of Reproductive pathology (YW) [online],09:00,,11:00,,QE2MDLIB,Online,TBL,Lecture,Clinical,Pathology,Various,YW,'11-20,,TBL - Sweet Dilemmas,Overview of Reproductive pathology,1.0,0.0,2.0,1.0
+,,,,,,Pathology SGL - Endocrine (Path Museum) Groups 11-15,Clinical TBL - Sweet Dilemmas QE2MDLIB: eLS Groups 11-20,11:00,09:00,12:00,11:00,Path Museum,QE2MDLIB,SGL,TBL,Pathology,Clinical,,,'11-15,'11-20,SGL - Endocrine,TBL - Sweet Dilemmas,,,1.0,2.0
+,,,,,,Pathology SGL - Endocrine (Path Museum) Groups 16-20,Pathology SGL - Endocrine (Path Museum) Groups 11-15,12:00,11:00,13:00,12:00,,,,,,,,,'16-20,'11-15,,,,,,
+,,,,,,Pathology SGL - Endocrine (Path Museum) Groups 1-5,Pathology SGL - Endocrine (Path Museum) Groups 16-20,09:00,12:00,10:00,13:00,,,,,,,,,'1-5,'16-20,,,,,,
+,,,,,,Pathology SGL - Endocrine (Path Museum) Groups 6-10,Pathology SGL - Endocrine (Path Museum) Groups 1-5,10:00,09:00,11:00,10:00,,,,,,,,,'6-10,'1-5,,,,,,
+,,,,,,Clinical TBL - Sweet Dilemmas QE2MDLIB: eLS Groups 1-10,Pathology SGL - Endocrine (Path Museum) Groups 6-10,11:00,10:00,13:00,11:00,QE2MDLIB,Path Museum,TBL,SGL,Clinical,Pathology,,,'1-10,'6-10,TBL - Sweet Dilemmas,SGL - Endocrine,,,2.0,1.0
+16.0,15.0,Monday,Friday,2025-10-13,2025-10-10,Anatomy - Reproductive Tract Histology (TW) [Ross LT],Clinical TBL - Sweet Dilemmas QE2MDLIB: eLS Groups 1-10,09:00,11:00,11:00,13:00,Ross,QE2MDLIB,Lecture,TBL,Anatomy,Clinical,TW,Various,,'1-10,Reproductive Tract Histology,TBL - Sweet Dilemmas,0.0,1.0,,
+,,,,,,Physiology - Male repro physiology (RW) [FJ Clark],Anatomy - Reproductive Tract Histology (TW) [Ross LT],13:00,09:00,14:00,11:00,FJC,Ross,,,Physiology,Anatomy,RW,TW,,,Male repro physiology,Reproductive Tract Histology,,,1.0,2.0
+,,,,,,Physiology - Female repro physiology (RW) [FJ Clark],Physiology - Male repro physiology (RW) [FJ Clark],14:00,13:00,15:00,14:00,,,,,,,,,,,Female repro physiology,Male repro physiology,,,,
+,,,,,,Pharmacology - Hormonal contraception (FP) [FJ Clark],Physiology - Female repro physiology (RW) [FJ Clark],15:00,14:00,16:00,15:00,,,,,Pharmacology,Physiology,FP,RW,,,Hormonal contraception,Female repro physiology,,,,
+,,,,,,Pharmacology - Drugs for androgens & Anabolic steroids (FP) [FJ Clark],Pharmacology - Hormonal contraception (FP) [FJ Clark],16:00,15:00,17:00,16:00,,,,,,,,,,,Drugs for androgens & Anabolic steroids,Hormonal contraception,,,,
+,,Tuesday,Monday,2025-10-14,2025-10-13,Anatomy - The Pelvic Cavity wet lab [ANHB G05] Group1,Pharmacology - Drugs for androgens & Anabolic steroids (FP) [FJ Clark],09:00,16:00,11:00,17:00,ANHB G05,FJC,Lab,Lecture,Anatomy,Pharmacology,Various,FP,'1,,The Pelvic Cavity wet lab,Drugs for androgens & Anabolic steroids,1.0,0.0,2.0,1.0
+,,,,,,Anatomy - The Pelvic Cavity wet lab [ANHB G05] Group 2,Anatomy - The Pelvic Cavity wet lab [ANHB G05] Group1,11:00,09:00,13:00,11:00,,,,,,,,,'2,'1,,,,,,
+,,,,,,Anatomy - The Pelvic Cavity wet lab [ANHB G05] Group 3,Anatomy - The Pelvic Cavity wet lab [ANHB G05] Group 2,14:00,11:00,16:00,13:00,,,,,,,,,'3,'2,,,,,,
+,,,,,,Biochemistry - Lactation (JK) [online],Anatomy - The Pelvic Cavity wet lab [ANHB G05] Group 3,,14:00,,16:00,Online,ANHB G05,Online,Lab,Biochemistry,Anatomy,JK,Various,,'3,Lactation,The Pelvic Cavity wet lab,0.0,1.0,1.0,2.0
+,,Wednesday,Tuesday,2025-10-15,2025-10-14,Clinical - Diabetes (2h) [Seng Khee Gan] [FJ Clark LT],Biochemistry - Lactation (JK) [online],08:00,,10:00,,Seng Khee Gan,Online,Seng Khee Gan,Lecture,Clinical,Biochemistry,2h,JK,,,Diabetes,Lactation,,,2.0,1.0
+,,,,,,MicroModule Revision Guide: Bacterial Infections of the Reproductive Tract,Clinical - Diabetes (2h) [Seng Khee Gan] [FJ Clark LT],,08:00,,10:00,Online,Seng Khee Gan,Online,,MicroModule,Clinical,,2h,,,Revision Guide: Bacterial Infections of the Reproductive Tract,Diabetes,,,1.0,2.0
+,,,,,,Self directed revision: Introduction to Parasitology in Humans (Focus on Toxoplasma gondii),MicroModule Revision Guide: Bacterial Infections of the Reproductive Tract,,,,,,,Online,Lecture,Self directed revision,MicroModule,Focus on Toxoplasma gondii,,,,Introduction to Parasitology in Humans,Revision Guide: Bacterial Infections of the Reproductive Tract,,,,
+,,Thursday,Wednesday,2025-10-16,2025-10-15,Pathology - Benign breast disease (BD) [FJ Clark],Self directed revision: Introduction to Parasitology in Humans (Focus on Toxoplasma gondii),08:00,,9:00,,FJC,Online,,,Pathology,Self directed revision,BD,Focus on Toxoplasma gondii,,,Benign breast disease,Introduction to Parasitology in Humans,,,,
+,,,,,,Pathology - Malignant breast disease (BD) [FJ Clark],Pathology - Benign breast disease (BD) [FJ Clark],09:00,08:00,10:00,9:00,,,,,,,,,,,Malignant breast disease,Benign breast disease,,,,
+,,,,,,Anatomy - Pelvic Viscera (TW) [FJ Clark LT],Pathology - Malignant breast disease (BD) [FJ Clark],10:00,09:00,11:00,10:00,,,,,Anatomy,Pathology,TW,BD,,,Pelvic Viscera,Malignant breast disease,,,,
+,,,,,,Clinical Seminar Radiology- Endocrine imaging/Nuclear Medicine (RF) [FJ Clark],Anatomy - Pelvic Viscera (TW) [FJ Clark LT],14:00,10:00,16:00,11:00,,,,,Clinical,Anatomy,RF,TW,,,Seminar Radiology- Endocrine imaging/Nuclear Medicine,Pelvic Viscera,,,2.0,1.0
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
+,,,,,,,,,,,,,,Online,Lecture,,,,,,,,,,,,
