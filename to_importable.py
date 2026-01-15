@@ -13,7 +13,7 @@ TimetableField = Literal[
 
 ]
 
-import conf
+import md_timetable_extract.conf as conf
 
 # Predefined set of strings
 WEEK = 'week'
@@ -81,8 +81,6 @@ class EventRow:
         self.description = self.scrape_description()
 
         
-
-
     def scrape_subject(self):
         self.subject = self.row[SUBJECT]
         if self.subject:
@@ -222,9 +220,16 @@ def drop_groups(df: pd.DataFrame, groups: list[str]) -> pd.DataFrame:
     mask = df['groups'].apply(lambda x: not any(group in x for group in groups))
     return df[mask]
 
-input_file = conf.input_xlsx
+input_file = conf.SCRAPED_TIMETABLE_PATH
 
-df = pd.read_excel(input_file)
+# if `input_file` does not exist, raise error
+if not Path(input_file).exists():
+    raise FileNotFoundError(f"Input file {input_file} does not exist.")
+# read csv or xlsx file
+if input_file.endswith('.csv'):
+    df = pd.read_csv(input_file)
+elif input_file.endswith('.xlsx') or input_file.endswith('.xls'):
+    df = pd.read_excel(input_file)
 # convert nan to empty string
 df = df.fillna('')
 
@@ -232,7 +237,7 @@ df_non_mandatory = df[df['is_mandatory'] == 0]
 assert not df_non_mandatory.empty, "No non-mandatory events found in the input file."
 df_mandatory = df[df['is_mandatory'] == 1]
 
-output_dir = Path(conf.output_csv).parent
+output_dir = Path(conf.IMPORTABLE_CALENDAR_FILE).parent
 df_to_calendar_importable_csv(df_non_mandatory, Path(output_dir, 'output_non_mandatory.csv'), include_session_type=False)
 df_to_calendar_importable_csv(df_mandatory, Path(output_dir, 'output_mandatory.csv'), include_session_type=True)
 

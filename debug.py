@@ -2,9 +2,9 @@ import pandas as pd
 import octk
 
 from md_timetable_extract import extract, structs, process_timetable, post_processing
-import conf
+import md_timetable_extract.conf as conf
 
-input_file = conf.input_timetable
+input_file = conf.INPUT_TIMETABLE
 calendar_views: list[structs.CalendarWeekView] = extract.get_weekly_calendar_views(input_file, pages='1-2')
 
 
@@ -16,5 +16,5 @@ for calendar_view in calendar_views:
 df = pd.DataFrame(all_events)
 df = post_processing.post_process_events(df)
 
-output_file = octk.uniquify(conf.scraped_output_path)
+output_file = octk.uniquify(conf.VERSION_OUTPUT_DIR)
 df.to_csv(output_file, index=False)
