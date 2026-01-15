@@ -5,6 +5,7 @@ from copy import Error
 import camelot
 import pandas as pd
 from md_timetable_extract import structs
+import re
 
 pd.options.mode.chained_assignment = None
 
@@ -12,11 +13,27 @@ def is_key_table(table: camelot.core.Table) -> bool:
     return table.df.iloc[0, 0].strip().lower() == 'key'
 
 def get_week_number(calendar_df: camelot.core.Table) -> str:
+    """
+    Returns the week number from the calendar dataframe.
+
+    Current version assumptions:
+        - The first cell of the table contains the week name, e.g. "Week 01"
+        - The week number is preceded by the word "Week"
+        - If the first cell contains "Key", then this is not a calendar table and
+        `None` is returned. (NOTE: This should be handled before calling this function)
+    
+    Args:
+        - calendar_df (camelot.core.Table): The dataframe representing a 1-page, 1-week 
+        calendar view.
+
+    """
     table_name = calendar_df.iloc[0, 0]
     if table_name.strip().lower() == 'key':
         return None
-    # get last numbers in table name
-    week_number = table_name.split()[-1]
+    match = re.search(r'Week\s*(\d+)', table_name, re.IGNORECASE)
+    if not match:
+        raise ValueError(f"Could not find week number in table name: {table_name}")
+    week_number = match.group(1)
     # if less than 10, add a 0
     if len(week_number) < 2:
         week_number = '0' + week_number
@@ -25,7 +42,16 @@ def get_week_number(calendar_df: camelot.core.Table) -> str:
 
 # entry point
 def get_weekly_calendar_views(pdf_path: str, ignore_pages:list[int], start_page:int = 1, pages='all') -> list[structs.CalendarWeekView]:
+    """Extracts weekly calendar views from a timetable PDF.
+    
+    Any pages before `start_page` or in `ignore_pages` are skipped
+
+    """
     # TODO: add GUI to select line_scale
+
+    invalid_extractions = {
+        # page number - scale tried: df
+    }
     
     handler = camelot.handlers.PDFHandler(pdf_path)
     page_numbers = handler._get_pages(pages)
@@ -40,12 +66,13 @@ def get_weekly_calendar_views(pdf_path: str, ignore_pages:list[int], start_page:
         while not extraction_successful and scales_to_try:
             line_scale = scales_to_try.pop(0)
             print(f"  - Processing page {page} with line_scale={line_scale}")
-            calendar_df = extract_calendar_as_df(pdf_path, page=str(page), line_scale=line_scale)
+            calendar_df = extract_calendar_page_view_as_df(pdf_path, page=str(page), line_scale=line_scale)
 
             if is_calendar_view_df_valid(calendar_df):
                 print(f"    - Found valid calendar table on page {page} with line_scale={line_scale}")
                 extraction_successful = True
             else:
+                invalid_extractions[f"p{page}-scale {line_scale}"] = calendar_df
                 print(f"    ! No valid calendar tables found on page {page} with line_scale={line_scale}")
                 line_scale += 20
         
@@ -76,20 +103,41 @@ def are_date_headers_valid(headers: pd.Series) -> bool:
 
     return True
 
+
+def find_header_row_index(df: pd.DataFrame) -> int:
+    """Header row expectation:
+    Time | [day] <date> | [day] <date> | ...
+    Returns the index of the header row, or -1 if not found.
+    """
+
+    for i, row in df.iterrows():
+        first_cell = row.iloc[0].strip().lower()
+        if first_cell == 'time':
+            if are_date_headers_valid(row):
+                return i
+    return -1
+
 def is_calendar_view_df_valid(df: pd.DataFrame) -> bool:
     
-    # assume second row is header
-    second_row = df.iloc[1]
+    # assume second row is time header + dates header
+    # example:
+    # Time | Monday <date> | Tuesday <date> | ...
+    EXPECTED_NUM_COLUMNS = 6 # Time + 5 weekdays
+    header_index = find_header_row_index(df)
+    if header_index == -1:
+        print(f"    - No valid header row found in extracted calendar view")
+        return False
+    header_row = df.iloc[header_index]
 
-    expected_num_columns = 6 # Time + 5 weekdays
     # extract may have *more* than expected columns due to the camelot splits columns when there are two events in one time slot
-    if len(second_row) < expected_num_columns:
-        print(f"    - Invalid number of columns in calendar view: {len(second_row)}")
+    if len(header_row) < EXPECTED_NUM_COLUMNS:
+        print(f"    - Invalid number of columns in calendar view: {len(header_row)}")
         return False
     
     # check that there are an expected number of unique columns
-    if len(second_row.unique()) < expected_num_columns:
-        print(f"    - Not enough unique columns in calendar view: {len(second_row.unique())}")
+    # e.g. Time + 5 weekdays = 6 unique columns
+    if len(header_row.unique()) < EXPECTED_NUM_COLUMNS:
+        print(f"    - Not enough unique columns in calendar view: {len(header_row.unique())}")
         return False
 
     # # todo: only check first column
@@ -98,14 +146,17 @@ def is_calendar_view_df_valid(df: pd.DataFrame) -> bool:
     # if second_row[0].strip() not in required_columns:
     #     return False
     
-    if not are_date_headers_valid(second_row):
+
+    # TODO: this call maybe redundant since we already check this in find_header_row_index
+    if not are_date_headers_valid(header_row):
         print(f"    - Invalid date headers found in extracted calendar view")
         return False
     
     return True
 
-def extract_calendar_as_df(pdf_path: str, page:str, line_scale) -> pd.DataFrame:
-    """Extracts the calendar table from a PDF page and returns it as a DataFrame.
+def extract_calendar_page_view_as_df(pdf_path: str, page:str, line_scale) -> pd.DataFrame:
+    """Extracts a single page calendar view from a PDF and returns it as a DataFrame
+    *without* rearranging cells.
     Assumes exactly one calendar table per page, and ignores any 'Key' tables."""
     tables = camelot.read_pdf(
         pdf_path, flavor='lattice', 
@@ -127,6 +178,21 @@ def extract_calendar_as_df(pdf_path: str, page:str, line_scale) -> pd.DataFrame:
     calendar_df = tables[calendar_index].df
     return calendar_df
 
+def is_valid_time_value(time_str: str) -> bool:
+    """Check if a string is a valid time value in HH:MM format.
+    Valid examples: '09:00', '14:30', '8', '08', '12', '23:59', '8.00', '08.00'
+    """
+    pattern = r'^\d{1,2}([:\.]\d{2})?$'
+    if re.match(pattern, time_str):
+        if ':' in time_str:
+            hours, minutes = map(int, time_str.split(':'))
+            if 0 <= hours < 24 and 0 <= minutes < 60:
+                return True
+        else:
+            hours = int(time_str)
+            if 0 <= hours < 24:
+                return True
+    return False
 
 def interpolate_week_view(df: pd.DataFrame) -> pd.DataFrame:
 
@@ -148,9 +214,13 @@ def interpolate_week_view(df: pd.DataFrame) -> pd.DataFrame:
         raise Exception(f"Error occurred while extracting online rows: {e}")
 
     # find first row with number in the time column
+    is_start_found = False
     for i, row in base_df.iterrows():
-        if row.iloc[0].isdigit():
+        if is_valid_time_value(row.iloc[0]):
+            is_start_found = True
             break
+    if not is_start_found:
+        raise ValueError("Could not find start of time slots in timetable.")
     time_start_row = i
 
     # make new table starting from time_start_row
