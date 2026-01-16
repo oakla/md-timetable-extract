@@ -151,7 +151,8 @@ class EventRow:
         return self.format_date(self.row[DATE], format)
     
 
-    def format_date(self, date, format='csv'):
+    def format_date(self, date:str, format='csv'):
+        date = pd.to_datetime(date, errors='coerce')
         if format == 'csv':
             return date.strftime('%m/%d/%Y')
         elif format == 'ical':
@@ -164,9 +165,11 @@ class EventRow:
     def end_time(self, format='csv'):
         return self.format_time(self.row[END_TIME], format)
 
-    def format_time(self, time, format='csv'):
-        if not time:
+    def format_time(self, time:str, format='csv'):
+        time_value = pd.to_datetime(time, errors='coerce')
+        if pd.isna(time_value):
             return ''
+        time = time_value.time()
         if isinstance(time, str):
             time = datetime.strptime(time, '%H:%M').time().strftime('%I:%M %p')
         if format == 'csv':
@@ -226,9 +229,9 @@ input_file = conf.SCRAPED_TIMETABLE_PATH
 if not Path(input_file).exists():
     raise FileNotFoundError(f"Input file {input_file} does not exist.")
 # read csv or xlsx file
-if input_file.endswith('.csv'):
+if input_file.suffix == '.csv':
     df = pd.read_csv(input_file)
-elif input_file.endswith('.xlsx') or input_file.endswith('.xls'):
+elif input_file.suffix in ['.xlsx', '.xls']:
     df = pd.read_excel(input_file)
 # convert nan to empty string
 df = df.fillna('')
@@ -237,7 +240,14 @@ df_non_mandatory = df[df['is_mandatory'] == 0]
 assert not df_non_mandatory.empty, "No non-mandatory events found in the input file."
 df_mandatory = df[df['is_mandatory'] == 1]
 
+# output_files = {
+#     'non_mandatory': conf.importable_calendar_path_for_group('all', mandatory=False]
+
+# if conf.IMPORTABLE_CALENDAR_FILE.exists():
+#     input(f"Warning: Overwriting existing file {conf.IMPORTABLE_CALENDAR_FILE}\n Press Enter to continue...")
 output_dir = Path(conf.IMPORTABLE_CALENDAR_FILE).parent
-df_to_calendar_importable_csv(df_non_mandatory, Path(output_dir, 'output_non_mandatory.csv'), include_session_type=False)
-df_to_calendar_importable_csv(df_mandatory, Path(output_dir, 'output_mandatory.csv'), include_session_type=True)
+output_dir.mkdir(parents=True, exist_ok=True)
+df_to_calendar_importable_csv(df_non_mandatory, Path(output_dir, f'{conf.IMPORTABLE_CALENDAR_FILE}(non_mandatory).csv'), include_session_type=False)
+df_to_calendar_importable_csv(df_mandatory, Path(output_dir, f'{conf.IMPORTABLE_CALENDAR_FILE}(mandatory).csv'), include_session_type=True)
+df_to_calendar_importable_csv(df, Path(output_dir, f'{conf.IMPORTABLE_CALENDAR_FILE}(all).csv'), include_session_type=True)
 

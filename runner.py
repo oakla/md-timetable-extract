@@ -74,7 +74,6 @@ def add_my_custom_columns(df: pd.DataFrame) -> pd.DataFrame:
 if IS_ADD_CUSTOM_COLUMNS:
     df = add_my_custom_columns(df)
 
-if output_file.parent.exists():
-    input(f"Output folder already exists: \n\t{output_file.parent}. \nPress Enter to continue...")
+    
 output_file.parent.mkdir(parents=True, exist_ok=True)
 df.to_csv(output_file, index=False)
