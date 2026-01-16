@@ -247,6 +247,20 @@ def add_groups_column(df):
     df['groups'] = df.apply(lambda row: extract_group_numbers(row['description']) if row['session_type'].lower() != 'lecture' else "", axis=1)
     return df
 
+def add_groups_list_column(df):
+    # Add a 'groups_list' column based on the 'groups' column, splitting by '-'
+    def split_groups(groups_str):
+        if not groups_str:
+            return []
+        if '-' in groups_str:
+            start, end = groups_str.lstrip("'").split('-')
+            return [str(i) for i in range(int(start), int(end) + 1)]
+        else:
+            return [groups_str.lstrip("'")]
+    
+    df['groups_list'] = df['groups'].apply(split_groups)
+    return df
+
 def set_row_topic(row):
     # assume topic is after "<subject> - " and before the next '(' or '['
     match = re.search(r'(.*?)(?:\(|\[|$)', row['description'])
@@ -406,6 +420,7 @@ def post_process_events(df):
     df = set_subject(df)
     df = add_presenter_column(df)
     df = add_groups_column(df)
+    df = add_groups_list_column(df)
     df = drop_unwanted_groups(df)
     df = add_topics(df)
     df = trim_topic(df)
