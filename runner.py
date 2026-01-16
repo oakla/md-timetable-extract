@@ -4,7 +4,6 @@ import octk
 from md_timetable_extract import extract, structs, process_timetable, post_processing
 import md_timetable_extract.conf as conf
 
-
 START_FROM_PAGE = 1
 IGNORE_PAGES = [14, 13, 12]  # pages to ignore during extraction
 IS_ADD_CUSTOM_COLUMNS = False
@@ -75,4 +74,7 @@ def add_my_custom_columns(df: pd.DataFrame) -> pd.DataFrame:
 if IS_ADD_CUSTOM_COLUMNS:
     df = add_my_custom_columns(df)
 
+if output_file.parent.exists():
+    input(f"Output folder already exists: \n\t{output_file.parent}. \nPress Enter to continue...")
+output_file.parent.mkdir(parents=True, exist_ok=True)
 df.to_csv(output_file, index=False)
