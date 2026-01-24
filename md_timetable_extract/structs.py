@@ -31,18 +31,27 @@ def get_week_number(calendar_df: pd.DataFrame) -> str:
     return week_number
 
 
-def are_date_headers_valid(headers: pd.Series) -> bool:
-    # check if other columns are valid date headers
+def are_scraped_date_headers_valid(headers: pd.Series) -> bool:
+    """check if other columns are valid date headers
+    valid formats:
+    - '%d %B %Y' (e.g. '01 January 2024')
+    - %A %d %B %Y' (e.g. 'Monday 01 January 2024')
+
+    """
+    # TODO: can this be replace with dateutil.parser?
+    ignore_chars = [',']
+
     for col in headers[1:]:
-        # remove any trailing (\d*) from the column name
-        col = col.strip().replace(",", "").replace("/", " ").replace("-", " ")
-        # check if col matches format 'Day, DD/MM/YYYY'
-        try:
-            _ = pd.to_datetime(col, format='%A %d %B %Y', errors='raise')
-        except Exception as e:
+        pattern1 = r'^\d{1,2}\s+[A-Za-z]+\s+\d{4}$'  # e.g. '01 January 2024'
+        pattern2 = r'^[A-Za-z]+\s+\d{1,2}\s+[A-Za-z]+\s+\d{4}$'  # e.g. 'Monday 01 January 2024'
+        col_cleaned = col.replace(',', '').strip()
+        if not (re.match(pattern1, col_cleaned) or re.match(pattern2, col_cleaned)):
             return False
 
     return True
+
+
+
 
 
 
@@ -50,6 +59,31 @@ def are_date_headers_valid(headers: pd.Series) -> bool:
 class CalendarWeekView:
     week: int
     df: pd.DataFrame
+
+
+    # def __post_init__(self):
+    #     self.format_date_column_names()
+    
+    # def format_date_column_names(self, month_format="%B"):
+    #     """Convert date column names to standard datetime format (YYYY-MM-DD).
+    #         valid input formats:
+    #         - '%d %B %Y' (e.g. '01 January 2024')
+    #         - %A %d %B %Y' (e.g. 'Monday 01 January 2024')
+    #     """
+
+    #     new_columns = []
+    #     for col in self.df.columns:
+    #         if col == 'Time':
+    #             new_columns.append(col)
+    #             continue
+    #         date_obj = dateutil_parse(col, fuzzy=True)
+    #         if date_obj is None:
+    #             # new_columns.append(col)  # keep original if parsing fails 
+    #             # TODO: if fails, test raising error instead
+    #             raise ValueError(f"Could not parse date column name: {col}")
+    #         else:
+    #             new_columns.append(date_obj.strftime("%Y-%m-%d"))
+    #     self.df.columns = new_columns
     
 
 @dataclass
@@ -100,7 +134,7 @@ class ScrapedWeekRaw:
         
 
         # TODO: this call maybe redundant since this check is in `structs.find_header_row_index`
-        if not are_date_headers_valid(header_row):
+        if not are_scraped_date_headers_valid(header_row):
             print(f"    - Invalid date headers found in extracted calendar view")
             return False
         
@@ -119,7 +153,7 @@ class ScrapedWeekRaw:
             if first_cell == 'time':
                 self.time_column_index = 0
                 self.date_row_index = i
-                if are_date_headers_valid(row):
+                if are_scraped_date_headers_valid(row):
                     return i
         return -1
     

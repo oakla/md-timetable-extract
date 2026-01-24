@@ -76,4 +76,32 @@ if IS_ADD_CUSTOM_COLUMNS:
 
     
 output_file.parent.mkdir(parents=True, exist_ok=True)
-df.to_csv(output_file, index=False)
+try:
+    df.to_csv(output_file, index=False)
+except Exception as e:
+    print(f"Error saving CSV file: {e}")
+else:
+    print(f"Scraped timetable saved to: {output_file}")
+
+
+# TODO: address or suppress error message after running the script:
+"""
+Exception ignored in atexit callback <function rmtree at 0x0000029B82D918A0>:
+Traceback (most recent call last):
+  File "%PYENV_DIR%\pyenv-win\versions\3.13.1\Lib\shutil.py", line 790, in rmtree
+    return _rmtree_unsafe(path, onexc)
+  File "%PYENV_DIR%\pyenv-win\versions\3.13.1\Lib\shutil.py", line 629, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "%PYENV_DIR%\pyenv-win\versions\3.13.1\Lib\shutil.py", line 625, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: '%LOCALAPPDATA%\\Temp\\tmp6bj6p8yj\\page-11.pdf'
+Exception ignored in atexit callback <function rmtree at 0x0000029B82D918A0>:
+Traceback (most recent call last):
+  File "%PYENV_DIR%\pyenv-win\versions\3.13.1\Lib\shutil.py", line 790, in rmtree
+    return _rmtree_unsafe(path, onexc)
+  File "%PYENV_DIR%\pyenv-win\versions\3.13.1\Lib\shutil.py", line 629, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "%PYENV_DIR%\pyenv-win\versions\3.13.1\Lib\shutil.py", line 625, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: '%LOCALAPPDATA%\\Temp\\tmph0n7uzmg\\page-10.pdf'
+"""

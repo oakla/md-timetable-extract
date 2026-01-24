@@ -1,3 +1,4 @@
+from typing import Union
 import pandas as pd
 import octk
 import re
@@ -23,22 +24,12 @@ MANDATORY_INDICATORS = [
 
 DROP_ROW_INDICATORS = [
     "NON-TEACHING WEEK",
+    "Public Holiday",
+    "PUBLIC-HOLIDAY"
 ]
 
 SESSION_TYPES_WITHOUT_SUBJECTS = [
     "Assessment",
-]
-
-INCLUDE_GROUPS = [
-    # "'1",
-    "'1-10",
-    # "'11-20",
-    # "'2",
-    "'3",
-    # "'11-15",
-    "'1-5",
-    # "'16-20",
-    # "'6-10",
 ]
 
 location_indicators_map = {
@@ -364,6 +355,7 @@ def drop_useless_rows(df):
     Drops rows that are not useful for the timetable.
     These are rows that contain 'NON-TEACHING WEEK' or 'Public Holiday' in the description.
     """
+    # TODO: log dropped rows
     df = df[~df['description'].str.contains('|'.join(DROP_ROW_INDICATORS), case=False, na=False)]
     return df
 
@@ -401,15 +393,41 @@ def add_event_lengths(df):
     return df
 
 
-def drop_unwanted_groups(df):
-    """ Drops rows from the DataFrame where the 'groups' column does not contain any of the specified groups
-    or if the 'groups' column is NOT empty."""
-    if 'groups' not in df.columns:
+def drop_unwanted_groups(df, include_groups: Union[list[str], str] = "all"):
+    """Drops rows from the DataFrame where the 'groups_list' column does not contain any of the specified groups
+    AND if the 'groups' column is NOT empty.
+    
+    @param df: pandas DataFrame - the input DataFrame
+    @param include_groups: list[str], "all", str 
+        - list of group numbers to include (e.g. ['1', '2', '3'])
+        - "all" to include all groups
+        - str of comma-separated group numbers (e.g. '1,3,5') or range (e.g. '1-5') can be mixed (e.g. '1,3-5,7')
+    @return: pandas DataFrame - the filtered DataFrame
+    """
+    GROUPS_COLUMN = 'groups_list'
+
+    if not GROUPS_COLUMN in df.columns:
         return df
-    if not INCLUDE_GROUPS:
+    if include_groups == "all":
         return df
-    mask = df['groups'].apply(lambda x: any(group in x for group in INCLUDE_GROUPS) or x.strip() == "")
-    return df[mask]
+    if isinstance(include_groups, str):
+        include_groups = include_groups.split(',')
+        # expand ranges like '1-5' into ['1', '2', '3', '4', '5']
+        expanded_groups = []
+        for grp in include_groups:
+            if '-' in grp:
+                start, end = grp.split('-')
+                expanded_groups.extend([str(i) for i in range(int(start), int(end) + 1)])
+            else:
+                expanded_groups.append(grp.strip())
+        include_groups = expanded_groups
+    include_groups_set = set(include_groups)
+    groups_lists = df[GROUPS_COLUMN].tolist()
+    keep_mask = [
+        not groups or any(group in include_groups_set for group in groups)
+        for groups in groups_lists
+    ]
+    return df[keep_mask]
 
 
 def post_process_events(df):

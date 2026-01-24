@@ -3,6 +3,7 @@
 import pandas as pd
 import re
 from datetime import datetime
+from dateutil.parser import parse as dateutil_parse
 
 valid_days = [
     "Monday",
@@ -22,20 +23,6 @@ def add_30_minutes(time):
         return f"{int(hour)+1}:00"
 
 
-def colname_to_date(date, month_format="%B") -> datetime:
-    parts = date.replace(",", " ").split()
-    if parts[0] not in valid_days:
-        print(f"Warning: Unexpected date")
-        return None
-    # remove text after YYYY
-    date = " ".join(parts[:4])
-
-    try:
-        return pd.to_datetime(date, format=f"%A %d {month_format} %Y")
-    except ValueError:
-        return colname_to_date(date, month_format="%b")
-
-
 def is_online_time_slot(event, time_slot):
     if re.search(r"online", time_slot, flags=re.IGNORECASE):
         return True
@@ -51,9 +38,10 @@ def process_event(event_description:str, week_df:pd.DataFrame, date_col_name:str
     start_time = week_df[week_df[date_col_name] == event_identifier]["Time"].iloc[0]
     end_time = week_df[week_df[date_col_name] == event_identifier]["Time"].iloc[-1]
 
-    # if date_col_name has (\d*) at the end, remove it
+
+    # Handle duplicate date columns (i.e. if date_col_name has (\d*) at the end, remove it)
     date_col_name = re.sub(r"\(\d*\)$", "", date_col_name).strip()
-    date_obj = colname_to_date(date_col_name)
+    date_obj = dateutil_parse(date_col_name, fuzzy=True)
 
     session_type = ""
     location = ""
@@ -91,10 +79,16 @@ def get_days_events(date:str, week_number:int, week_df:pd.DataFrame) -> list[dic
     ]
 
 
-def process_week_days(week_number:int, week_df:pd.DataFrame) -> list[dict]:
+def process_week_days(week_number:int, weekview_df:pd.DataFrame) -> list[dict]:
+    """Transform a 'week view' dataframe (i.e. with days/dates as columns) into a list of events.
+    Each event is represented as a dictionary with keys like 'week', 'day', 'date', 'description', 'etc'.
+
+    The returned list is suitable for conversion into a pandas DataFrame for further processing.
+    
+    """
     events = []
-    for date in week_df.columns[1:]:
-        day_events = get_days_events(date, week_number, week_df=week_df)
+    for date in weekview_df.columns[1:]:
+        day_events = get_days_events(date, week_number, week_df=weekview_df)
         if day_events is not None:
             events.extend(day_events)
 

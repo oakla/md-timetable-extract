@@ -21,4 +21,12 @@ calendar_views: list[structs.CalendarWeekView] = (
 )
 
 all_events = []
+for calendar_view in calendar_views:
+    week_i_events:list[dict] = process_timetable.process_week_days(calendar_view.week, calendar_view.df)
+    all_events.extend(week_i_events)
 
+df = pd.DataFrame(all_events)
+df = post_processing.post_process_events(df)
+
+
+pass
