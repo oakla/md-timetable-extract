@@ -1,5 +1,7 @@
 import pandas as pd 
 import octk
+import shutil
+from pathlib import Path
 
 from md_timetable_extract import extract, structs, process_timetable, post_processing
 import md_timetable_extract.conf as conf
@@ -75,7 +77,11 @@ if IS_ADD_CUSTOM_COLUMNS:
     df = add_my_custom_columns(df)
 
     
+# Create output directory
 output_file.parent.mkdir(parents=True, exist_ok=True)
+# Copy input timetable to output directory for reference
+shutil.copy2(conf.INPUT_TIMETABLE, output_file.parent / Path(conf.INPUT_TIMETABLE).name)
+# Save scraped timetable to CSV
 try:
     df.to_csv(output_file, index=False)
 except Exception as e:
