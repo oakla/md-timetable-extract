@@ -2,11 +2,12 @@ import pandas as pd
 import numpy as np
 from typing import List
 from pathlib import Path
+from md_timetable_extract.conf import SCRAPED_TIMETABLE_OUTPUT_PATH
 
-NEW_CSV_FILE = r"E:\alexa\Code\proj\md-timetable-extract\content\output\scraped\2025 IMED3112 Timetable STUDENTS v4.csv"
-OLD_CSV_FILE = r"E:\alexa\Code\proj\md-timetable-extract\content\output\scraped\2025 IMED3112 Timetable STUDENTS v3(1)(1).csv"
+NEW_CSV_FILE = SCRAPED_TIMETABLE_OUTPUT_PATH
+OLD_CSV_FILE = r""
 
-OUTPUT_DIR = r"E:\alexa\Code\proj\md-timetable-extract\content\output\changes"
+OUTPUT_DIR = r""
 CHANGES_PREVIOUS_OUTPUT = Path(OUTPUT_DIR, r"previous_events.csv")
 CHANGES_CURRENT_OUTPUT = Path(OUTPUT_DIR, r"updated_events.csv")
 
