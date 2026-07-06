@@ -223,7 +223,7 @@ def drop_groups(df: pd.DataFrame, groups: list[str]) -> pd.DataFrame:
     mask = df['groups'].apply(lambda x: not any(group in x for group in groups))
     return df[mask]
 
-input_file = conf.SCRAPED_TIMETABLE_PATH
+input_file = conf.SCRAPED_TIMETABLE_OUTPUT_PATH
 
 # if `input_file` does not exist, raise error
 if not Path(input_file).exists():

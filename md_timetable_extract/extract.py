@@ -1,7 +1,6 @@
 # Description: Scrape the timetable into a dataframes that represent
 # week-long calendar layouts. i.e. Days as columns, & time slots as rows.
 
-from copy import Error
 import camelot
 import pandas as pd
 from md_timetable_extract import structs

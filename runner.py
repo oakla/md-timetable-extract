@@ -7,8 +7,8 @@ from md_timetable_extract import extract, structs, process_timetable, post_proce
 import md_timetable_extract.conf as conf
 
 START_FROM_PAGE = 1
-IGNORE_PAGES = [14, 13, 12]  # pages to ignore during extraction
-IS_ADD_CUSTOM_COLUMNS = False
+IGNORE_PAGES = conf.IGNORE_PAGES  # pages to ignore during extraction
+IS_ADD_CUSTOM_COLUMNS = False # I think is here for when you need the output to match an existing table you plan to append the new one to
 
 
 calendar_views: list[structs.CalendarWeekView] = extract.get_weekly_calendar_views(conf.INPUT_TIMETABLE, ignore_pages=IGNORE_PAGES, start_page=START_FROM_PAGE)
@@ -21,7 +21,7 @@ for calendar_view in calendar_views:
 df = pd.DataFrame(all_events)
 df = post_processing.post_process_events(df)
 
-output_file = octk.uniquify(conf.SCRAPED_TIMETABLE_PATH)
+output_file = octk.uniquify(conf.SCRAPED_TIMETABLE_OUTPUT_PATH)
 
 
 def add_my_custom_columns(df: pd.DataFrame) -> pd.DataFrame:
