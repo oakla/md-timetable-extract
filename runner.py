@@ -90,6 +90,37 @@ else:
     print(f"Scraped timetable saved to: {output_file}")
 
 
+
+# write README.txt file to output directory
+readme_string = f"""# MD timetables
+This folder contains timetable information scraped from the MD calendar presented in different formats.
+
+## Importable Calendars
+`importable_calendar.csv` files can be imported into Google Calendar. (May also work with calendar applications, but I haven't tested that.)
+
+### WARNINGS:
+- There is no quick or straightforward way to undo the import once it is done, so I recommend not importing into your main calendar.
+- Instead, create a new calendar in Google Calendar and import the file into that calendar. You can then toggle that calendar on and off as needed across devices (e.g. phone, tablet, computer).
+
+## Excel Spreadsheet
+The xlsx file ({output_file.name}) was originally created so I could track which classes I was up to date with. Use it how you like :)
+
+
+
+Authored by Alex Oakley.
+Email me if you have any questions or feedback.
+
+Enjoy!
+
+
+Source code: https://github.com/oakla/md-timetable-extract"""
+
+with open(output_file.parent / "README.txt", 'w') as f:
+    f.write(readme_string)
+
+
+    
+
 # TODO: address or suppress error message after running the script:
 """
 Exception ignored in atexit callback <function rmtree at 0x0000029B82D918A0>:
